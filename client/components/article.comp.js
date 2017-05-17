@@ -1,39 +1,65 @@
+import {X_Component} from "./component.dec";
 "use strict";
+//
+// const model = {
+//     author: 'admir'
+// };
+
+@X_Component({
+    templateUrl: 'client/components/article.comp.html',
+    model: {}
+})
 export class ArticleComponent extends HTMLElement {
+
     constructor() {
         super();
-        // this.shadow = this.createShadowRoot();
+        this.model = {
+            author: '',
+            heart: 0
+        };
+
+        this.parsedElem = null;
     }
 
     static get observedAttributes() {
-        return [];
+        return ["author"];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-
+        console.log(name);
     }
 
     connectedCallback() {
-        var template = `
-              <div class="article-preview">
-                    <div class="article-meta">
-                        <a href="profile.html"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-                        <div class="info">
-                            <a href="" class="author">Eric Simons</a>
-                            <span class="date">January 20th</span>
-                        </div>
-                        <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                            <i class="ion-heart"></i> 29
-                        </button>
-                    </div>
-                    <a href="" class="preview-link">
-                        <h1>How to build webapps that scale</h1>
-                        <p>This is the description for the post.</p>
-                        <span>Read more...</span>
-                    </a>
-                </div>
-        `;
-        this.innerHTML = template;
+        while (this.firstChild) {
+            this.removeChild(this.firstChild);
+        }
+        ArticleComponent.template(this.model).then(e => {
+            this.appendChild(e());
+            var btn = this.querySelector('#ion-heart');
+            btn.addEventListener('click',() => {
+                this.updateHearts();
+            });
+        });
+    }
+
+    updateHearts() {
+        var span = this.querySelector('#ion-heart > span');
+        this.model.favoritesCount = this.model.favoritesCount + 1;
+        span.innerHTML = this.model.favoritesCount;
+    }
+
+
+    renderComponent() {
+        while (this.firstChild) {
+            this.removeChild(this.firstChild);
+        }
+        ArticleComponent.template(this.model).then(e => {
+            this.appendChild(e());
+        });
+    }
+
+    test() {
+       alert('a');
     }
 
 

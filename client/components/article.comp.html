@@ -1,0 +1,19 @@
+<div class="article-preview">
+    <div class="article-meta">
+        <a href="profile.html">
+            <img src="${model.author.image}"/>
+        </a>
+        <div class="info">
+            <a href="" class="author">${model.author.username}</a>
+            <span class="date">${model.createdAt}</span>
+        </div>
+        <button id="ion-heart" class="btn btn-outline-primary btn-sm pull-xs-right">
+            <i class="ion-heart"></i> <span>${model.favoritesCount}</span>
+        </button>
+    </div>
+    <a href="" class="preview-link">
+        <h1>${model.title}</h1>
+        <p>${model.description}</p>
+        <span>Read more...</span>
+    </a>
+</div>
