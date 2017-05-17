@@ -6,7 +6,7 @@ import {X_Component} from "./component.dec";
 // };
 
 @X_Component({
-    templateUrl: 'client/components/article.comp.html',
+    templateUrl: 'components/article.comp.html',
     model: {}
 })
 export class ArticleComponent extends HTMLElement {

@@ -6,6 +6,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
     filename: 'index.html',
     inject: 'body',
 });
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: ['./client/index.js'],
@@ -24,7 +25,10 @@ module.exports = {
             {test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/}
         ]
     },
-    plugins: [HtmlWebpackPluginConfig, new webpack.HotModuleReplacementPlugin()],
+    plugins: [HtmlWebpackPluginConfig, new webpack.HotModuleReplacementPlugin(), new CopyWebpackPlugin([{
+        context: './client',
+        from: '**/*.html',
+    }])],
     devServer: {
         hot: true,
         contentBase: './',

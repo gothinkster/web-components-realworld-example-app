@@ -3,7 +3,7 @@ import {ArticleComponent} from "../components/article.comp";
 "use strict";
 
 @X_Component({
-    templateUrl: 'client/pages/home.comp.html'
+    templateUrl: 'pages/home.comp.html'
 })
 export class HomeComponent extends HTMLElement {
     constructor() {
@@ -21,6 +21,7 @@ export class HomeComponent extends HTMLElement {
 
     connectedCallback() {
         HomeComponent.template({}).then(el => {
+
             this.appendChild(el());
 
             const globalFeed = document.getElementById('globalFeed');

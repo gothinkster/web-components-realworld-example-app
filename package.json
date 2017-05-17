@@ -6,9 +6,12 @@
   "author": "<admir_sabanovic@live.com>",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "webpack --config webpack.config.prod.js",
+    "prod": "cp serve.js dist/serve.js && node serve.js"
   },
   "dependencies": {
+    "copy-webpack-plugin": "^4.0.1",
     "html-webpack-plugin": "^2.28.0",
     "path": "^0.12.7",
     "webpack": "^2.5.1",
