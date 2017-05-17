@@ -24,16 +24,27 @@ export class HomeComponent extends HTMLElement {
             this.appendChild(el());
 
             const globalFeed = document.getElementById('globalFeed');
-
-            fetch('https://conduit.productionready.io/api/articles').then(function (response) {
-                return response.json();
-            }).then(r => {
-                r.articles.forEach(article => {
-                    this.generateArticle(article, globalFeed);
-                });
-            });
+            this.fetchAndGenerateGlobalFeed(globalFeed);
 
             this.popularTags();
+
+            const globalFeedButton = this.querySelector('#globalFeedButton');
+            globalFeedButton.addEventListener('click', () => {
+                this.removeCurrentTagFilter();
+                globalFeedButton.classList.add('active');
+                this.cleanGlobalFeed();
+                this.fetchAndGenerateGlobalFeed(globalFeed);
+            });
+        });
+    }
+
+    fetchAndGenerateGlobalFeed(globalFeed) {
+        fetch('https://conduit.productionready.io/api/articles').then(function (response) {
+            return response.json();
+        }).then(r => {
+            r.articles.forEach(article => {
+                this.generateArticle(article, globalFeed);
+            });
         });
     }
 
@@ -57,11 +68,7 @@ export class HomeComponent extends HTMLElement {
             r.tags.forEach(tag => {
                 const tagEl = this.createNewTagElement(tag);
                 tagEl.addEventListener('click', () => {
-
-                    const getCurrentTagFilter = document.getElementById('tagFilter');
-                    if(getCurrentTagFilter) {
-                        getCurrentTagFilter.parentNode.removeChild(getCurrentTagFilter);
-                    }
+                    this.removeCurrentTagFilter();
 
                     navItems.forEach(navItem => {
                         const navLink = navItem.querySelector('a');
@@ -71,11 +78,7 @@ export class HomeComponent extends HTMLElement {
                     const newNavItem = this.creanteNewNavItem(tag);
 
                     feedOptions.appendChild(newNavItem);
-
-                    const globalFeed = document.getElementById('globalFeed');
-                    while (globalFeed.firstChild) {
-                        globalFeed.removeChild(globalFeed.firstChild);
-                    }
+                    this.cleanGlobalFeed();
 
                     fetch('https://conduit.productionready.io/api/articles?limit=10&offset=0&tag=' + tag).then(function (response) {
                         return response.json();
@@ -84,12 +87,25 @@ export class HomeComponent extends HTMLElement {
                             this.generateArticle(article, globalFeed);
                         });
                     });
-                    // https://conduit.productionready.io/api/articles?limit=10&offset=0&tag=testing
-
                 });
                 tagList.appendChild(tagEl);
             });
         });
+    }
+
+    cleanGlobalFeed() {
+        const globalFeed = document.getElementById('globalFeed');
+        while (globalFeed.firstChild) {
+            globalFeed.removeChild(globalFeed.firstChild);
+        }
+        return globalFeed;
+    }
+
+    removeCurrentTagFilter() {
+        const getCurrentTagFilter = document.getElementById('tagFilter');
+        if (getCurrentTagFilter) {
+            getCurrentTagFilter.parentNode.removeChild(getCurrentTagFilter);
+        }
     }
 
     creanteNewNavItem(tag) {
