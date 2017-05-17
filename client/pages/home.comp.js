@@ -43,6 +43,7 @@ export class HomeComponent extends HTMLElement {
         fetch('https://conduit.productionready.io/api/articles').then(function (response) {
             return response.json();
         }).then(r => {
+            this.cleanGlobalFeed();
             r.articles.forEach(article => {
                 this.generateArticle(article, globalFeed);
             });
@@ -66,6 +67,9 @@ export class HomeComponent extends HTMLElement {
         fetch('https://conduit.productionready.io/api/tags').then(function (response) {
             return response.json();
         }).then(r => {
+            while (tagList.firstChild) {
+                tagList.removeChild(tagList.firstChild);
+            }
             r.tags.forEach(tag => {
                 const tagEl = this.createNewTagElement(tag);
                 tagEl.addEventListener('click', () => {
