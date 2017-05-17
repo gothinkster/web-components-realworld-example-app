@@ -1,5 +1,6 @@
 import {HomeComponent} from "../pages/home.comp";
 import {CLoginComponent} from "../pages/login.comp";
+import {CRegisterComponent} from "../pages/register.comp";
 export class RouterHandler {
     constructor() {
         var pushState = history.pushState;
@@ -17,11 +18,10 @@ export class RouterHandler {
             } else if(url != undefined) {
                 routeTo = url;
             }
-            RouterHandler.handleButtonChanges(routeTo);
+            RouterHandler.navigate(routeTo);
             RouterHandler._onChangeCallbacks.forEach(c => {
                 c(routeTo);
             });
-            // }
         };
     }
 
@@ -29,34 +29,20 @@ export class RouterHandler {
         RouterHandler._onChangeCallbacks.push(callback);
     }
 
-    static handleButtonChanges(url) {
-        let page = null;
-
-        if (url == undefined || url == '/') {
-            page = new HomeComponent();
-        } else {
-            page = new CLoginComponent();
-        }
-        const outlet = document.querySelector('router-outlet');
-        while (outlet.firstChild) {
-            outlet.removeChild(outlet.firstChild);
-        }
-        outlet.appendChild(page);
-    }
-
     static navigate(url) {
         let page = null;
 
-        if (url == '/') {
-            page = new HomeComponent();
-        } else {
+        if (url == '/login') {
             page = new CLoginComponent();
+        } else if(url == '/register') {
+            page = new CRegisterComponent();
+        } else {
+            page = new HomeComponent();
         }
         const outlet = document.querySelector('router-outlet');
         while (outlet.firstChild) {
             outlet.removeChild(outlet.firstChild);
         }
-        // history.pushState({}, null, url);
         outlet.appendChild(page);
     }
 }

@@ -41,7 +41,7 @@ export class CNavComponent extends HTMLElement {
                         <a style="cursor: pointer;" route="/login" class="nav-link">Sign in</a>
                     </li>
                     <li class="nav-item">
-                        <a style="cursor: pointer;" class="nav-link">Sign up</a>
+                        <a style="cursor: pointer;" route="/register" class="nav-link">Sign up</a>
                     </li>
                 </ul>
             </div>
