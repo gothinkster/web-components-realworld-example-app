@@ -106,8 +106,8 @@ export class HomeComponent extends HTMLElement {
     createNewTagElement(tag) {
         const tagEl = document.createElement('a');
         tagEl.className = 'tag-pill tag-default';
-        tagEl.href = '#';
         tagEl.innerHTML = tag;
+        tagEl.style="cursor: pointer;";
         return tagEl;
     }
 

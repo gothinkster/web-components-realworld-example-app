@@ -1,4 +1,7 @@
 "use strict";
+
+import {RouterHandler} from '../../router/router-handler';
+
 export class CNavComponent extends HTMLElement {
     constructor() {
         super();
@@ -22,7 +25,7 @@ export class CNavComponent extends HTMLElement {
                 <ul class="nav navbar-nav pull-xs-right">
                     <li class="nav-item">
                         <!-- Add "active" class when you're on that page" -->
-                        <a class="nav-link active" href="">Home</a>
+                        <a style="cursor: pointer;" route="/" class="nav-link active">Home</a>
                     </li>
                     <!--<li class="nav-item">-->
                         <!--<a class="nav-link" href="">-->
@@ -35,10 +38,10 @@ export class CNavComponent extends HTMLElement {
                         <!--</a>-->
                     <!--</li>-->
                     <li class="nav-item">
-                        <a class="nav-link" href="">Sign in</a>
+                        <a style="cursor: pointer;" route="/login" class="nav-link">Sign in</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Sign up</a>
+                        <a style="cursor: pointer;" class="nav-link">Sign up</a>
                     </li>
                 </ul>
             </div>
@@ -47,6 +50,33 @@ export class CNavComponent extends HTMLElement {
 
 
         this.innerHTML = template;
+        let links = this.querySelectorAll('a.nav-link');
+        links.forEach(link => {
+           link.addEventListener('click', () => {
+               var routingTo = link.getAttribute('route');
+               let state = {};
+               state.route = routingTo;
+               history.pushState(state, null, routingTo);
+           });
+        });
+
+        this.updateActive(location.pathname);
+
+        RouterHandler.onChange((routeTo) => {
+            this.updateActive(routeTo);
+        });
+
+    }
+
+    updateActive(route) {
+        let links = this.querySelectorAll('a.nav-link');
+        links.forEach(link => {
+            link.className = 'nav-link';
+            let linkRoute = link.getAttribute('route');
+            if (linkRoute === route) {
+                link.className = 'nav-link active';
+            }
+        });
     }
 
 
