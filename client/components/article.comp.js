@@ -1,13 +1,9 @@
 import {X_Component} from "./component.dec";
+import {RouterHandler} from "../router/router-handler";
 "use strict";
-//
-// const model = {
-//     author: 'admir'
-// };
 
 @X_Component({
-    templateUrl: 'components/article.comp.html',
-    model: {}
+    templateUrl: 'components/article.comp.html'
 })
 export class ArticleComponent extends HTMLElement {
 
@@ -17,30 +13,42 @@ export class ArticleComponent extends HTMLElement {
             author: '',
             heart: 0
         };
-
-        this.parsedElem = null;
     }
 
     static get observedAttributes() {
-        return ["author"];
+        return [];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         console.log(name);
     }
 
-    connectedCallback() {
-        while (this.firstChild) {
-            this.removeChild(this.firstChild);
-        }
-        ArticleComponent.template(this.model).then(e => {
-            this.appendChild(e());
-            var btn = this.querySelector('#ion-heart');
-            btn.addEventListener('click',() => {
-                this.updateHearts();
-            });
-        });
+    disconnectedCallback() {
+        console.log('disconnected');
+        const button = this.querySelector('#ion-heart');
+        button.removeEventListener('click', this.updateHearts.bind(this));
     }
+
+    connectedCallback() {
+        this.innerHTML = this.render();
+        const button = this.querySelector('#ion-heart');
+        button.addEventListener('click', this.updateHearts.bind(this));
+
+        const authorButton = this.querySelector('#author');
+        authorButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            RouterHandler.getInstance.router.navigate(authorButton.getAttribute('href'));
+        });
+
+        const previewLink = document.getElementById('preview-link');
+        previewLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            RouterHandler.getInstance.router.navigate(previewLink.getAttribute('href'));
+        });
+
+
+    }
+
 
     updateHearts() {
         var span = this.querySelector('#ion-heart > span');
@@ -49,18 +57,36 @@ export class ArticleComponent extends HTMLElement {
     }
 
 
-    renderComponent() {
-        while (this.firstChild) {
-            this.removeChild(this.firstChild);
-        }
-        ArticleComponent.template(this.model).then(e => {
-            this.appendChild(e());
-        });
+    render() {
+        return `
+            <div class="article-preview">
+                <div class="article-meta">
+                    <a href="profile.html">
+                        <img src="${this.model.author.image}"/>
+                    </a>
+                    <div class="info">
+                        <a id="author" href="/profile/${this.model.author.username}" class="author">${this.model.author.username}</a>
+                        <span class="date">${this.model.createdAt}</span>
+                    </div>
+                    <button id="ion-heart" class="btn btn-outline-primary btn-sm pull-xs-right">
+                        <i class="ion-heart"></i> <span>${this.model.favoritesCount}</span>
+                    </button>
+                </div>
+                <a id="preview-link" href="#/article/${this.model.slug}" class="preview-link">
+                    <h1>${this.model.title}</h1>
+                    <p>${this.model.description}</p>
+                    <span>Read more...</span>
+                    <ul class="tag-list">
+                        <li class="tag-default tag-pill tag-outline">
+                            well
+                        </li>
+                        <li class="tag-default tag-pill tag-outline">
+                            well
+                        </li>
+                    </ul>
+                </a>
+            </div>
+        `;
     }
-
-    test() {
-       alert('a');
-    }
-
 
 }

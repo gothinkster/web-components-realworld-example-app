@@ -12,6 +12,9 @@ export class CLoginComponent extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
 
     }
+    disconnectedCallback() {
+        console.log('disconnected');
+    }
 
     connectedCallback() {
         var template = `

@@ -20,6 +20,7 @@ export class HomeComponent extends HTMLElement {
     }
 
     connectedCallback() {
+        location.href = '#/';
         HomeComponent.template({}).then(el => {
 
             this.appendChild(el());
@@ -128,6 +129,7 @@ export class HomeComponent extends HTMLElement {
         const tagEl = document.createElement('a');
         tagEl.className = 'tag-pill tag-default';
         tagEl.innerHTML = tag;
+        tagEl.href='#/';
         tagEl.style="cursor: pointer;";
         return tagEl;
     }

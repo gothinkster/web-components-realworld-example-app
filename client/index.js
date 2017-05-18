@@ -6,16 +6,13 @@ import {CRegisterComponent} from "./pages/register.comp";
 import {RouterOutlet} from "./router/router-outlet";
 import {ComponentRegistry} from "./component-registry";
 import {RouterHandler} from "./router/router-handler";
-
+import {ProfileComponent} from "./pages/profile.comp";
+import {ArticlePreviewComponent} from "./pages/article-preview.comp";
 
 class App {
     constructor() {
         this.registerComponents();
-
-        const url = location.pathname;
-        RouterHandler.navigate(url);
-
-        // console.log(globalFeed);
+        RouterHandler.getInstance.init();
     }
 
     registerComponents() {
@@ -40,6 +37,14 @@ class App {
             {
                 tagName: 'c-register',
                 component: CRegisterComponent
+            },
+            {
+                tagName: 'c-profile',
+                component: ProfileComponent
+            },
+            {
+                tagName: 'article-preview',
+                component: ArticlePreviewComponent
             }
         ];
         ComponentRegistry.register(components);
