@@ -8,6 +8,7 @@ import {ComponentRegistry} from "./component-registry";
 import {RouterHandler} from "./router/router-handler";
 import {ProfileComponent} from "./pages/profile.comp";
 import {ArticlePreviewComponent} from "./pages/article-preview.comp";
+import {CommentPreviewComponent} from "./components/comment-preview.comp";
 
 class App {
     constructor() {
@@ -45,6 +46,10 @@ class App {
             {
                 tagName: 'article-preview',
                 component: ArticlePreviewComponent
+            },
+            {
+                tagName: 'comment-preview',
+                component: CommentPreviewComponent
             }
         ];
         ComponentRegistry.register(components);

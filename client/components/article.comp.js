@@ -1,10 +1,6 @@
-import {X_Component} from "./component.dec";
 import {RouterHandler} from "../router/router-handler";
 "use strict";
 
-@X_Component({
-    templateUrl: 'components/article.comp.html'
-})
 export class ArticleComponent extends HTMLElement {
 
     constructor() {

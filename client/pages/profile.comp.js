@@ -8,7 +8,6 @@ export class ProfileComponent extends HTMLElement {
         this.username = params.username;
         this.model = null;
 
-        console.log(params);
         this.$username = null;
         this.$bio = null;
         this.userImg = null;

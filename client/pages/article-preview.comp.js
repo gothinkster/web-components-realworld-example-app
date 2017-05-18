@@ -1,3 +1,4 @@
+import {CommentPreviewComponent} from "../components/comment-preview.comp";
 "use strict";
 var markdown = require("markdown").markdown;
 
@@ -16,7 +17,8 @@ export class ArticlePreviewComponent extends HTMLElement {
         this.$articleActionDate = null;
         this.$articleActionFollowUsername = null;
         this.$articleActionFavouritesCount = null;
-        console.log(markdown);
+
+        this.$commentsWrapper = null;
     }
 
     static get observedAttributes() {
@@ -39,21 +41,28 @@ export class ArticlePreviewComponent extends HTMLElement {
         this.$articleActionDate = document.getElementById('article-action-date');
         this.$articleActionFollowUsername = document.getElementById('article-action-follow-username');
         this.$articleActionFavouritesCount = document.getElementById('article-action-favorites-count');
-
+        this.$commentsWrapper = document.getElementById('comments-wrapper');
         // /api/articles/:slug
         fetch('https://conduit.productionready.io/api/articles/' + this.slug).then((response) => {
             return response.json();
         }).then(r => {
             this.article = r.article;
             this.updateArticleContent();
-            console.log(this.article);
         });
 
         fetch('https://conduit.productionready.io/api/articles/' + this.slug + '/comments').then((response) => {
             return response.json();
         }).then(r => {
-            console.log(r);
+            r.comments.forEach(comment => {
+                // console.log(comment);
+                this.generateCommentComponents(comment);
+            });
         });
+    }
+
+    generateCommentComponents(comment) {
+        let newComment = new CommentPreviewComponent(comment.author.username, comment.body);
+        this.$commentsWrapper.appendChild(newComment);
     }
 
     updateArticleContent() {
@@ -148,20 +157,9 @@ export class ArticlePreviewComponent extends HTMLElement {
             </button>
           </div>
         </form>
-        
-        <div class="card">
-          <div class="card-block">
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          </div>
-          <div class="card-footer">
-            <a href="" class="comment-author">
-              <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-            </a>
-            &nbsp;
-            <a href="" class="comment-author">Jacob Schmidt</a>
-            <span class="date-posted">Dec 29th</span>
-          </div>
+        <div id="comments-wrapper">
         </div>
+        
      
       </div>
 
