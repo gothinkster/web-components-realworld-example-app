@@ -13,6 +13,9 @@ export class ProfileComponent extends HTMLElement {
         this.userImg = null;
         this.followButton = null;
         this.followButtonUsername = null;
+
+        this.myArticlesButtonHandler = this.myArticlesButtonHandler.bind(this);
+        this.favoritedArticlesButtonHandler = this.favoritedArticlesButtonHandler.bind(this);
     }
 
     static get observedAttributes() {
@@ -37,9 +40,31 @@ export class ProfileComponent extends HTMLElement {
             return response.json();
         }).then(r => {
             this.model = r.profile;
-            console.log(this.model);
             this.updateUserProfileDom();
         });
+
+        this.$globalFeed = this.querySelector('#globalFeed');
+        this.$myArticlesButton = this.querySelector('#my-articles');
+        this.$favoritedArticlesButton = this.querySelector('#favorited-articles');
+
+        this.$myArticlesButton.addEventListener('click', this.myArticlesButtonHandler);
+        this.$favoritedArticlesButton.addEventListener('click', this.favoritedArticlesButtonHandler);
+
+        this.fetchArticles('?author=' + this.username);
+    }
+
+    myArticlesButtonHandler(e) {
+        e.preventDefault();
+        this.fetchArticles('?author=' + this.username);
+        this.$favoritedArticlesButton.classList.remove('active');
+        this.$myArticlesButton.classList.add('active');
+    }
+
+    favoritedArticlesButtonHandler(e) {
+        e.preventDefault();
+        this.fetchArticles('?favorited=' + this.username);
+        this.$favoritedArticlesButton.classList.add('active');
+        this.$myArticlesButton.classList.remove('active');
     }
 
 
@@ -48,6 +73,40 @@ export class ProfileComponent extends HTMLElement {
         this.followButtonUsername.textContent = this.model.username;
         this.$bio.textContent = this.model.bio;
         this.userImg.setAttribute('src', this.model.image);
+    }
+
+    fetchArticles(params, headers) {
+        this.cleanGlobalFeed();
+        this.$globalFeed.innerHTML = '<div class="article-preview">Loading articles </div>';
+        fetch('https://conduit.productionready.io/api/articles' + params, {
+            headers: headers
+        }).then(function (response) {
+            return response.json();
+        }).then(r => {
+            this.$globalFeed.textContent = '';
+            r.articles.forEach(article => {
+                this.generateArticle(article);
+            });
+            if(r.articles.length === 0) {
+                this.$globalFeed.innerHTML = '<div class="article-preview">No articles are here... yet. </div>';
+            }
+        });
+    }
+
+    cleanGlobalFeed() {
+        while (this.$globalFeed.firstChild) {
+            this.$globalFeed.removeChild(this.$globalFeed.firstChild);
+        }
+        return this.$globalFeed;
+    }
+
+    generateArticle(article) {
+        if (!article.author.image) {
+            article.author.image = 'https://static.productionready.io/images/smiley-cyrus.jpg';
+        }
+        let articleComponent = new ArticleComponent();
+        articleComponent.model = article;
+        this.$globalFeed.appendChild(articleComponent);
     }
 
 
@@ -82,30 +141,18 @@ export class ProfileComponent extends HTMLElement {
                         <div class="articles-toggle">
                           <ul class="nav nav-pills outline-active">
                             <li class="nav-item">
-                              <a class="nav-link active" href="">My Articles</a>
+                              <a id="my-articles" class="nav-link active" href="">My Articles</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" href="">Favorited Articles</a>
+                              <a id="favorited-articles" class="nav-link" href="">Favorited Articles</a>
                             </li>
                           </ul>
                         </div>
                 
-                        <div class="article-preview">
-                          <div class="article-meta">
-                            <a href=""><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-                            <div class="info">
-                              <a href="" class="author">Eric Simons</a>
-                              <span class="date">January 20th</span>
+                        <div id="globalFeed">
+                            <div class="article-preview">
+                             Loading articles
                             </div>
-                            <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                              <i class="ion-heart"></i> 29
-                            </button>
-                          </div>
-                          <a href="" class="preview-link">
-                            <h1>How to build webapps that scale</h1>
-                            <p>This is the description for the post.</p>
-                            <span>Read more...</span>
-                          </a>
                         </div>
                 
                       </div>

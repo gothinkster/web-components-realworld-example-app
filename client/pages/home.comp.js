@@ -1,5 +1,6 @@
 import {ArticleComponent} from "../components/article.comp";
 import {Authentication} from "../auth/authentication";
+import {RouterHandler} from "../router/router-handler";
 "use strict";
 
 
@@ -14,6 +15,7 @@ export class HomeComponent extends HTMLElement {
         this.$yourFeed = null;
         this.yourFeedHandleEvent = this.yourFeedHandleEvent.bind(this);
         this.globalFeedEventHandle = this.globalFeedEventHandle.bind(this);
+        RouterHandler.getInstance.router.navigate('#/');
     }
 
     static get observedAttributes() {
@@ -116,14 +118,19 @@ export class HomeComponent extends HTMLElement {
 
     fetchArticles(params, headers) {
         this.cleanGlobalFeed();
+        this.$globalFeed.innerHTML = '<div class="article-preview">Loading articles </div>';
         fetch('https://conduit.productionready.io/api/articles' + params, {
             headers: headers
         }).then(function (response) {
             return response.json();
         }).then(r => {
+            this.$globalFeed.textContent = '';
             r.articles.forEach(article => {
                 this.generateArticle(article);
             });
+            if(r.articles.length === 0) {
+                this.$globalFeed.innerHTML = '<div class="article-preview">No articles are here... yet. </div>';
+            }
         });
     }
 

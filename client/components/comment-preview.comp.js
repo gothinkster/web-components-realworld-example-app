@@ -3,10 +3,10 @@ import {RouterHandler} from "../router/router-handler";
 
 export class CommentPreviewComponent extends HTMLElement {
 
-    constructor(username, content) {
+    constructor() {
         super();
-        this._username = username;
-        this._content = content;
+        this._username = null;
+        this._content = null;
         this.authorImage = null;
         this.createdAt = null;
 
@@ -23,6 +23,7 @@ export class CommentPreviewComponent extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
+
         switch (name) {
             case 'username' : {
                 this._username = newValue;
@@ -31,6 +32,7 @@ export class CommentPreviewComponent extends HTMLElement {
                 this._content = newValue;
             }
         }
+
         this.updateScreen();
     }
 
@@ -68,10 +70,12 @@ export class CommentPreviewComponent extends HTMLElement {
 
 
     updateScreen() {
-        this.$authorUsername.textContent = this._username;
-        this.$authorImage.textContent = this.authorImage;
-        this.$createdAt.textContent = this.createdAt;
-        this.$content.textContent = this.content;
+        if (this.$authorUsername) {//dom is rendered
+            this.$authorUsername.textContent = this._username;
+            this.$authorImage.textContent = this.authorImage;
+            this.$createdAt.textContent = this.createdAt;
+            this.$content.textContent = this.content;
+        }
     }
 
     navigateToUser(e) {

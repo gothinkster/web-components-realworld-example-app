@@ -43,7 +43,6 @@ export class CLoginComponent extends HTMLElement {
             Authentication.instance.doAuthentication(email, password)
                 .then(success => {
                     RouterHandler.getInstance.router.navigate('/');
-                    console.log('success login');
                 })
                 .catch(errors => {
                     for (var prop in errors) {

@@ -64,13 +64,13 @@ export class CNavComponent extends HTMLElement {
     }
 
     createProfileLinks(user) {
-        let newArticle = this.createNavItemLink('/editor', '<i class="ion-compose"></i>&nbsp;New Post');
+        let newArticle = this.createNavItemLink('#/editor', '<i class="ion-compose"></i>&nbsp;New Post');
         this.$navUl.appendChild(newArticle);
 
-        let settings = this.createNavItemLink('/settings', '<i class="ion-gear-a"></i>&nbsp;Settings');
+        let settings = this.createNavItemLink('#/settings', '<i class="ion-gear-a"></i>&nbsp;Settings');
         this.$navUl.appendChild(settings);
 
-        let userProfile = this.createNavItemLink('/profile/' + user.username, user.username);
+        let userProfile = this.createNavItemLink('#/profile/' + user.username, user.username);
         this.$navUl.appendChild(userProfile);
     }
 
@@ -83,7 +83,6 @@ export class CNavComponent extends HTMLElement {
 
     setCurrentActive() {
         let curUrl = location.hash;
-        curUrl = curUrl.substring(1);
         console.log(curUrl);
         this.updateActive(curUrl);
     }
@@ -116,16 +115,16 @@ export class CNavComponent extends HTMLElement {
         return `
          <nav class="navbar navbar-light">
             <div class="container">
-                <a class="navbar-brand" href="/" data-navigo >conduit</a>
+                <a class="navbar-brand" href="#/" data-navigo >conduit</a>
                 <ul class="nav navbar-nav pull-xs-right">
                     <li class="nav-item">
-                        <a href="/" data-navigo class="nav-link">Home</a>
+                        <a href="#/" data-navigo class="nav-link">Home</a>
                     </li>
                     <li id="signin" class="nav-item">
-                        <a href="/login" data-navigo class="nav-link">Sign in</a>
+                        <a href="#/login" data-navigo class="nav-link">Sign in</a>
                     </li>
                     <li id="signup" class="nav-item">
-                        <a href="/register" data-navigo class="nav-link">Sign up</a>
+                        <a href="#/register" data-navigo class="nav-link">Sign up</a>
                     </li>
                 </ul>
             </div>

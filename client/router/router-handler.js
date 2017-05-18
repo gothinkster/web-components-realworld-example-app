@@ -1,5 +1,7 @@
 var Navigo = require('navigo');
 import {CLoginComponent} from "../pages/login.comp";
+import {AuthDefender} from "./auth-defender";
+import {Authentication} from "../auth/authentication";
 import {SettingsComponent} from "../pages/settings.comp";
 import {EditorComponent} from "../pages/editor.comp";
 import {ArticlePreviewComponent} from "../pages/article-preview.comp";
@@ -36,33 +38,38 @@ export class RouterHandler {
     }
 
     init() {
-        this.router.on(
-            {
-                '/login': () => {
-                    RouterHandler.inject(new CLoginComponent())
-                },
-                '/register': () => {
-                    RouterHandler.inject(new CRegisterComponent())
-                },
-                '/profile/:username': (params) => {
-                    RouterHandler.inject(new ProfileComponent(params))
-                },
-                '/article/:slug': (params) => {
-                    RouterHandler.inject(new ArticlePreviewComponent(params));
-                },
-                '/editor': () => {
-                    RouterHandler.inject(new EditorComponent())
-                },
-                '/settings': () => {
-                    RouterHandler.inject(new SettingsComponent())
-                },
-                '': () => {
-                    RouterHandler.inject(new HomeComponent())
-                }
-            }
-        ).resolve();
+        const routes = [
+            {path: '/settings', resolve: SettingsComponent, canActivate: AuthDefender.canActivate},
+            {path: '/login', resolve: CLoginComponent},
+            {path: '/register', resolve: CRegisterComponent},
+            {path: '/profile/:username', resolve: ProfileComponent},
+            {path: '/article/:slug', resolve: ArticlePreviewComponent},
+            {path: 'editor', resolve: EditorComponent, canActivate: AuthDefender.canActivate}
+        ];
 
-        // this.router.updatePageLinks();
+        this.router.on(() => {
+            RouterHandler.inject(new HomeComponent())
+        }).resolve();
+
+        routes.forEach(route => {
+            this.router.on(
+                route.path,
+                (params) => {
+                    RouterHandler.inject(new route.resolve(params))
+                },
+                {
+                    before: (done, params) => {
+                        if (!route.canActivate || route.canActivate()) {
+                            done();
+                        } else {
+                            this.router.navigate('/');
+                            done(false);
+                        }
+                    }
+                }
+            ).resolve();
+        });
+
     }
 }
 RouterHandler.instance = null;

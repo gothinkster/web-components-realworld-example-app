@@ -13,6 +13,8 @@ import {Authentication} from "./auth/authentication";
 import {EditorComponent} from "./pages/editor.comp";
 import {SettingsComponent} from "./pages/settings.comp";
 import {PopularTagsComponent} from "./components/popular-tags.comp";
+import {CommentsContainerComponent} from "./components/comments-container.comp";
+
 
 class App {
     constructor() {
@@ -55,6 +57,10 @@ class App {
             {
                 tagName: 'comment-preview',
                 component: CommentPreviewComponent
+            },
+            {
+                tagName: 'comments-container',
+                component: CommentsContainerComponent
             },
             {
                 tagName: 'c-editor',

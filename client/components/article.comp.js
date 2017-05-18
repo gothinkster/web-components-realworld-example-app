@@ -10,6 +10,8 @@ export class ArticleComponent extends HTMLElement {
             heart: 0
         };
         this.updateHearts = this.updateHearts.bind(this);
+
+        this.$tagList = null;
     }
 
     static get observedAttributes() {
@@ -27,6 +29,7 @@ export class ArticleComponent extends HTMLElement {
 
     connectedCallback() {
         this.innerHTML = this.render();
+        // this.$tagList = this.querySelector('ul.tag-list');
         const button = this.querySelector('#ion-heart');
         button.addEventListener('click', this.updateHearts);
 
@@ -41,8 +44,6 @@ export class ArticleComponent extends HTMLElement {
             e.preventDefault();
             RouterHandler.getInstance.router.navigate(previewLink.getAttribute('href'));
         });
-
-
     }
 
 
@@ -73,12 +74,13 @@ export class ArticleComponent extends HTMLElement {
                     <p>${this.model.description ? this.model.description : ''}</p>
                     <span>Read more...</span>
                     <ul class="tag-list">
-                        <li class="tag-default tag-pill tag-outline">
-                            well
-                        </li>
-                        <li class="tag-default tag-pill tag-outline">
-                            well
-                        </li>
+                        ${this.model.tagList.map(tag => {
+                            return `
+                            <li class="tag-default tag-pill tag-outline">
+                            ${tag}
+                            </li>
+                            `;
+                        }).join(' ')}
                     </ul>
                 </a>
             </div>

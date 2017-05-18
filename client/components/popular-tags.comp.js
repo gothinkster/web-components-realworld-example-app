@@ -4,13 +4,6 @@ export class PopularTagsComponent extends HTMLElement {
 
     constructor() {
         super();
-        // var event = new CustomEvent('build', { 'detail': elem.dataset.time });
-        //
-        // // Listen for the event.
-        //         elem.addEventListener('build', function (e) { ... }, false);
-        //
-        // // Dispatch the event.
-        //         elem.dispatchEvent(event);
     }
 
     static get observedAttributes() {
@@ -36,11 +29,9 @@ export class PopularTagsComponent extends HTMLElement {
         fetch('https://conduit.productionready.io/api/tags').then(function (response) {
             return response.json();
         }).then(r => {
-            if (tagList) {
                 while (tagList.firstChild) {
                     tagList.removeChild(tagList.firstChild);
                 }
-            }
             r.tags.forEach(tag => {
                 let tagEl = this.createNewTagElement(tag);
                 tagEl.addEventListener('click', () => {
