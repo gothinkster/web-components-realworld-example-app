@@ -1,5 +1,7 @@
 var Navigo = require('navigo');
 import {CLoginComponent} from "../pages/login.comp";
+import {SettingsComponent} from "../pages/settings.comp";
+import {EditorComponent} from "../pages/editor.comp";
 import {ArticlePreviewComponent} from "../pages/article-preview.comp";
 import {ProfileComponent} from "../pages/profile.comp";
 import {CRegisterComponent} from "../pages/register.comp";
@@ -47,6 +49,12 @@ export class RouterHandler {
                 },
                 '/article/:slug': (params) => {
                     RouterHandler.inject(new ArticlePreviewComponent(params));
+                },
+                '/editor': () => {
+                    RouterHandler.inject(new EditorComponent())
+                },
+                '/settings': () => {
+                    RouterHandler.inject(new SettingsComponent())
                 },
                 '': () => {
                     RouterHandler.inject(new HomeComponent())

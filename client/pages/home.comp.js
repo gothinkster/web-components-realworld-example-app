@@ -1,14 +1,19 @@
-import {X_Component} from "../components/component.dec";
 import {ArticleComponent} from "../components/article.comp";
+import {Authentication} from "../auth/authentication";
 "use strict";
 
-@X_Component({
-    templateUrl: 'pages/home.comp.html'
-})
+
 export class HomeComponent extends HTMLElement {
     constructor() {
         super();
-        // this.shadow = this.createShadowRoot();
+        this.auth = null;
+        if (Authentication.instance.auth) {
+            this.auth = Authentication.instance.auth;
+        }
+
+        this.$yourFeed = null;
+        this.yourFeedHandleEvent = this.yourFeedHandleEvent.bind(this);
+        this.globalFeedEventHandle = this.globalFeedEventHandle.bind(this);
     }
 
     static get observedAttributes() {
@@ -20,99 +25,108 @@ export class HomeComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        location.href = '#/';
-        HomeComponent.template({}).then(el => {
+        this.innerHTML = this.render();
+        this.$yourFeedButton = this.querySelector('#your-feed');
+        this.$globalFeedButton = this.querySelector('#globalFeedButton');
 
-            this.appendChild(el());
+        this.$globalFeed = this.querySelector('#globalFeed');
 
-            const globalFeed = document.getElementById('globalFeed');
-            this.fetchAndGenerateGlobalFeed(globalFeed);
-
-            this.popularTags();
-
-            const globalFeedButton = this.querySelector('#globalFeedButton');
-            globalFeedButton.addEventListener('click', () => {
-                this.removeCurrentTagFilter();
-                globalFeedButton.classList.add('active');
-                this.cleanGlobalFeed();
-                this.fetchAndGenerateGlobalFeed(globalFeed);
+        if (!this.auth) {
+            this.$yourFeedButton.parentNode.removeChild(this.$yourFeedButton);
+            this.$globalFeedButton.classList.add('active');
+            this.fetchArticles('');
+            console.log('NOT AUTHORIZED');
+        } else {
+            this.$yourFeedButton.addEventListener('click', this.yourFeedHandleEvent);
+            this.fetchArticles('/feed', {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + this.auth.token
             });
+            console.log('AUTHORIZED');
+        }
+
+        this.$globalFeedButton.addEventListener('click', this.globalFeedEventHandle);
+
+        let popularTags = this.querySelector('popular-tags');
+        popularTags.addEventListener('filter', (e) => {
+            this.onTagFilter(e.detail);
         });
     }
 
-    fetchAndGenerateGlobalFeed(globalFeed) {
-        fetch('https://conduit.productionready.io/api/articles').then(function (response) {
-            return response.json();
-        }).then(r => {
-            this.cleanGlobalFeed();
-            r.articles.forEach(article => {
-                this.generateArticle(article, globalFeed);
-            });
+    globalFeedEventHandle(e) {
+        e.preventDefault();
+        this.removeCurrentTagFilter();
+        this.$globalFeedButton.classList.add('active');
+        this.$yourFeedButton.classList.remove('active');
+        this.fetchArticles('');
+    }
+
+    yourFeedHandleEvent(e) {
+        e.preventDefault();
+        this.removeCurrentTagFilter();
+        this.$yourFeedButton.classList.add('active');
+        this.$globalFeedButton.classList.remove('active');
+        this.fetchArticles('/feed', {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+            'Authorization': 'Token ' + this.auth.token
         });
     }
 
-    generateArticle(article, globalFeed) {
+    generateArticle(article) {
         if (!article.author.image) {
             article.author.image = 'https://static.productionready.io/images/smiley-cyrus.jpg';
         }
         let articleComponent = new ArticleComponent();
         articleComponent.model = article;
-        globalFeed.appendChild(articleComponent);
+        this.$globalFeed.appendChild(articleComponent);
     }
 
-    popularTags() {
-        const tagList = document.getElementById('tagList');
-        const feedOptions = document.getElementById('feedOptions');
-        const navItems = feedOptions.querySelectorAll('li');
 
-        fetch('https://conduit.productionready.io/api/tags').then(function (response) {
-            return response.json();
-        }).then(r => {
-            while (tagList.firstChild) {
-                tagList.removeChild(tagList.firstChild);
-            }
-            r.tags.forEach(tag => {
-                const tagEl = this.createNewTagElement(tag);
-                tagEl.addEventListener('click', () => {
-                    this.removeCurrentTagFilter();
+    onTagFilter(tag) {
+        let feedOptions = this.querySelector('#feedOptions');
 
-                    navItems.forEach(navItem => {
-                        const navLink = navItem.querySelector('a');
-                        navLink.className = 'nav-link';
-                    });
-
-                    const newNavItem = this.creanteNewNavItem(tag);
-
-                    feedOptions.appendChild(newNavItem);
-                    this.cleanGlobalFeed();
-
-                    fetch('https://conduit.productionready.io/api/articles?limit=10&offset=0&tag=' + tag).then(function (response) {
-                        return response.json();
-                    }).then(r => {
-                        r.articles.forEach(article => {
-                            this.generateArticle(article, globalFeed);
-                        });
-                    });
-                });
-                tagList.appendChild(tagEl);
-            });
-        });
+        //clear any current state
+        this.removeCurrentTagFilter();
+        this.cleanGlobalFeed();
+        this.$yourFeedButton.classList.remove('active');
+        this.$globalFeedButton.classList.remove('active');
+        //generate new item
+        const newNavItem = this.creanteNewNavItem(tag);
+        feedOptions.appendChild(newNavItem);
+        this.fetchArticles('?limit=10&offset=0&tag=' + tag);
     }
 
     cleanGlobalFeed() {
-        const globalFeed = document.getElementById('globalFeed');
-        while (globalFeed.firstChild) {
-            globalFeed.removeChild(globalFeed.firstChild);
+        while (this.$globalFeed.firstChild) {
+            this.$globalFeed.removeChild(this.$globalFeed.firstChild);
         }
-        return globalFeed;
+        return this.$globalFeed;
     }
 
     removeCurrentTagFilter() {
-        const getCurrentTagFilter = document.getElementById('tagFilter');
+        const getCurrentTagFilter = this.querySelector('#tagFilter');
         if (getCurrentTagFilter) {
             getCurrentTagFilter.parentNode.removeChild(getCurrentTagFilter);
         }
     }
+
+
+
+    fetchArticles(params, headers) {
+        this.cleanGlobalFeed();
+        fetch('https://conduit.productionready.io/api/articles' + params, {
+            headers: headers
+        }).then(function (response) {
+            return response.json();
+        }).then(r => {
+            r.articles.forEach(article => {
+                this.generateArticle(article);
+            });
+        });
+    }
+
 
     creanteNewNavItem(tag) {
         const newNavItem = document.createElement('li');
@@ -125,13 +139,35 @@ export class HomeComponent extends HTMLElement {
         return newNavItem;
     }
 
-    createNewTagElement(tag) {
-        const tagEl = document.createElement('a');
-        tagEl.className = 'tag-pill tag-default';
-        tagEl.innerHTML = tag;
-        tagEl.href='#/';
-        tagEl.style="cursor: pointer;";
-        return tagEl;
+
+    render() {
+        return `
+        <div>
+            <c-banner></c-banner>
+            <div class="container page">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="feed-toggle">
+                            <ul id="feedOptions" class="nav nav-pills outline-active">
+                                <li class="nav-item">
+                                    <a id="your-feed" class="nav-link active" href="">Your Feed</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="globalFeedButton" href="#" class="nav-link">Global Feed</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="globalFeed">
+                            <span>Loading articles ...</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <popular-tags></popular-tags>
+                    </div>
+                </div>
+            </div>
+        </div>
+`;
     }
 
 }

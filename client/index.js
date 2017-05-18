@@ -9,9 +9,14 @@ import {RouterHandler} from "./router/router-handler";
 import {ProfileComponent} from "./pages/profile.comp";
 import {ArticlePreviewComponent} from "./pages/article-preview.comp";
 import {CommentPreviewComponent} from "./components/comment-preview.comp";
+import {Authentication} from "./auth/authentication";
+import {EditorComponent} from "./pages/editor.comp";
+import {SettingsComponent} from "./pages/settings.comp";
+import {PopularTagsComponent} from "./components/popular-tags.comp";
 
 class App {
     constructor() {
+        new Authentication();
         this.registerComponents();
         RouterHandler.getInstance.init();
     }
@@ -50,6 +55,18 @@ class App {
             {
                 tagName: 'comment-preview',
                 component: CommentPreviewComponent
+            },
+            {
+                tagName: 'c-editor',
+                component: EditorComponent
+            },
+            {
+                tagName: 'c-settings',
+                component: SettingsComponent
+            },
+            {
+                tagName: 'popular-tags',
+                component: PopularTagsComponent
             }
         ];
         ComponentRegistry.register(components);

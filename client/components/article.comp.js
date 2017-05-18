@@ -2,13 +2,14 @@ import {RouterHandler} from "../router/router-handler";
 "use strict";
 
 export class ArticleComponent extends HTMLElement {
-
+//todo generate tag list
     constructor() {
         super();
         this.model = {
             author: '',
             heart: 0
         };
+        this.updateHearts = this.updateHearts.bind(this);
     }
 
     static get observedAttributes() {
@@ -20,15 +21,14 @@ export class ArticleComponent extends HTMLElement {
     }
 
     disconnectedCallback() {
-        console.log('disconnected');
         const button = this.querySelector('#ion-heart');
-        button.removeEventListener('click', this.updateHearts.bind(this));
+        button.removeEventListener('click', this.updateHearts);
     }
 
     connectedCallback() {
         this.innerHTML = this.render();
         const button = this.querySelector('#ion-heart');
-        button.addEventListener('click', this.updateHearts.bind(this));
+        button.addEventListener('click', this.updateHearts);
 
         const authorButton = this.querySelector('#author');
         authorButton.addEventListener('click', (e) => {
@@ -70,7 +70,7 @@ export class ArticleComponent extends HTMLElement {
                 </div>
                 <a id="preview-link" href="#/article/${this.model.slug}" class="preview-link">
                     <h1>${this.model.title}</h1>
-                    <p>${this.model.description}</p>
+                    <p>${this.model.description ? this.model.description : ''}</p>
                     <span>Read more...</span>
                     <ul class="tag-list">
                         <li class="tag-default tag-pill tag-outline">
