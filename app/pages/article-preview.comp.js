@@ -28,8 +28,9 @@ export class ArticlePreviewComponent extends HTMLElement {
         this.$commentCreate = this.querySelector('comment-create');
         this.$commentsContainer = this.querySelector('comments-container');
         this.$commentCreate.addEventListener('comment', this.onCommentPost);
+        this.$articlePreviewBanner = this.querySelector('article-preview-banner');
 
-        Http.instance.doGet('/articles/' + this.slug).then((response) => {
+        Http.instance.doGet('/articles/' + this.slug, true).then((response) => {
             return response.json();
         }).then(r => {
             this.article = r.article;
@@ -50,7 +51,6 @@ export class ArticlePreviewComponent extends HTMLElement {
                 }
             };
             Http.instance.doPost('/articles/' + this.slug + '/comments', JSON.stringify(comment), true).then(response => {
-                console.log(response);
                 this.$commentsContainer.comments.unshift(response.comment);
                 this.$commentsContainer.refresh();
             });
@@ -58,12 +58,14 @@ export class ArticlePreviewComponent extends HTMLElement {
     }
 
     updateArticlePreviewBanner() {
-        const articlePreviewBanner = this.querySelector('article-preview-banner');
-        articlePreviewBanner.setAttribute('title', this.article.title);
-        articlePreviewBanner.setAttribute('username', this.article.author.username);
-        articlePreviewBanner.setAttribute('favorites-count', this.article.favoritesCount);
-        articlePreviewBanner.setAttribute('date', this.article.createdAt);
-        articlePreviewBanner.setAttribute('image', this.article.author.image);
+        this.$articlePreviewBanner.setAttribute('title', this.article.title);
+        this.$articlePreviewBanner.setAttribute('username', this.article.author.username);
+        this.$articlePreviewBanner.setAttribute('favorites-count', this.article.favoritesCount);
+        this.$articlePreviewBanner.setAttribute('date', this.article.createdAt);
+        this.$articlePreviewBanner.setAttribute('image', this.article.author.image);
+        this.$articlePreviewBanner.setAttribute('following', this.article.author.following);
+        this.$articlePreviewBanner.setAttribute('favorited', this.article.favorited);
+        this.$articlePreviewBanner._slug = this.article.slug;
     }
 
     updateArticleContent() {
@@ -74,7 +76,7 @@ export class ArticlePreviewComponent extends HTMLElement {
     render() {
         return `
               <div class="article-page">
-                <article-preview-banner title="Loading .." username=".." date=".." image="https://static.productionready.io/images/smiley-cyrus.jpg" favorites-count="Loading ..." ></article-preview-banner>
+                <article-preview-banner following="" title="Loading .." username=".." date=".." image="https://static.productionready.io/images/smiley-cyrus.jpg" favorites-count="Loading ..." ></article-preview-banner>
                 
                   <div class="container page">
                 

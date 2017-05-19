@@ -78,11 +78,11 @@ export class ArticleComponent extends HTMLElement {
         return `
 <div class="article-preview">
     <div class="article-meta">
-        <a href="profile.html">
+        <a href="#/profile/${this.model.author.username}">
             <img src="${this.model.author.image}"/>
         </a>
         <div class="info">
-            <a id="author" href="/profile/${this.model.author.username}" class="author">${this.model.author.username}</a>
+            <a id="author" href="#/profile/${this.model.author.username}" class="author">${this.model.author.username}</a>
             <span class="date">${this.model.createdAt}</span>
         </div>
         <button id="ion-heart" class="btn btn-outline-primary btn-sm pull-xs-right ${this.model.favorited ? 'active' : ''}">
