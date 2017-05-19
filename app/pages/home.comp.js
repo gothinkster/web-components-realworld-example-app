@@ -15,7 +15,10 @@ export class HomeComponent extends HTMLElement {
 
         this.yourFeedHandleEvent = this.yourFeedHandleEvent.bind(this);
         this.globalFeedEventHandle = this.globalFeedEventHandle.bind(this);
+        this.onPagination = this.onPagination.bind(this);
         RouterHandler.getInstance.router.navigate('#/');
+        this._offset = 0;
+        this._limit = 10;
     }
 
     static get observedAttributes() {
@@ -36,12 +39,10 @@ export class HomeComponent extends HTMLElement {
         if (!this.auth) {
             this.$yourFeedButton.parentNode.removeChild(this.$yourFeedButton);
             this.$globalFeedButton.classList.add('active');
-            this.fetchArticles('');
-            console.log('NOT AUTHORIZED');
+            this.fetchArticles('?limit=10&offset=' + this._offset);
         } else {
             this.$yourFeedButton.addEventListener('click', this.yourFeedHandleEvent);
-            this.fetchArticles('/feed', true);
-            console.log('AUTHORIZED');
+            this.fetchArticles('/feed?limit=10&offset=' + this._offset, true);
         }
 
         this.$globalFeedButton.addEventListener('click', this.globalFeedEventHandle);
@@ -52,12 +53,59 @@ export class HomeComponent extends HTMLElement {
         });
     }
 
+    createNavigation(articleCount) {
+        const ulPagination = this.querySelector('ul.pagination');
+        while (ulPagination.firstChild) {
+            ulPagination.firstChild.removeEventListener('click', this.onPagination);
+            ulPagination.removeChild(ulPagination.firstChild);
+        }
+        for (let i = 1; i <= articleCount / this._limit; i++) {
+            let temp = `<li class="page-item">
+                            <a class="page-link" href="">${i}</a>
+                        </li>`
+            let temp2 = document.createElement('div');
+            temp2.innerHTML = temp;
+            ulPagination.appendChild(temp2.firstChild);
+        }
+        const pagination = this.querySelectorAll('li.page-item');
+        pagination.forEach(p => {
+            p.addEventListener('click', (e) => this.onPagination(e, p));
+        });
+    }
+
+    cleanPagination() {
+        const pagination = this.querySelectorAll('li.page-item');
+        pagination.forEach(p => {
+            p.removeEventListener('click', (e) => this.onPagination);
+        });
+    }
+
+    onPagination(e, p) {
+        e.preventDefault();
+        let activePage = this.querySelector('li.page-item.active');
+        if(activePage) {
+            activePage.classList.remove('active');
+        }
+        p.classList.add('active');
+        this._offset = +p.textContent.trim() - 1;
+        let currentActive = this.querySelector('#feedOptions li.nav-item a.active');
+        if (currentActive.getAttribute('id') == 'your-feed') {
+            this.fetchNextArticle('/feed?limit=10&offset=' + this._offset * this._limit, true);
+        } else if (currentActive.getAttribute('id') == 'globalFeedButton') {
+            this.fetchNextArticle('?limit=10&offset=' + this._offset * this._limit);
+        } else {
+            let tagFilter = this.querySelector('#tagFilter').textContent.trim().substring(2);
+            this.fetchNextArticle('?limit=10&offset=' + this._offset * this._limit + '&tag=' + tagFilter);
+        }
+    }
+
+
     globalFeedEventHandle(e) {
         e.preventDefault();
         this.removeCurrentTagFilter();
         this.$globalFeedButton.classList.add('active');
         this.$yourFeedButton.classList.remove('active');
-        this.fetchArticles('');
+        this.fetchArticles('?limit=10&offset=' + this._offset);
     }
 
     yourFeedHandleEvent(e) {
@@ -65,7 +113,7 @@ export class HomeComponent extends HTMLElement {
         this.removeCurrentTagFilter();
         this.$yourFeedButton.classList.add('active');
         this.$globalFeedButton.classList.remove('active');
-        this.fetchArticles('/feed', true);
+        this.fetchArticles('/feed?limit=10&offset=' + this._offset, true);
     }
 
     generateArticle(article) {
@@ -89,7 +137,7 @@ export class HomeComponent extends HTMLElement {
         //generate new item
         const newNavItem = this.creanteNewNavItem(tag);
         feedOptions.appendChild(newNavItem);
-        this.fetchArticles('?limit=10&offset=0&tag=' + tag);
+        this.fetchArticles('?limit=10&offset=' + this._offset + '&tag=' + tag);
     }
 
     cleanGlobalFeed() {
@@ -107,8 +155,28 @@ export class HomeComponent extends HTMLElement {
     }
 
 
-
     fetchArticles(params, auth) {
+        this.cleanGlobalFeed();
+        this.$globalFeed.innerHTML = '<div class="article-preview">Loading articles </div>';
+
+        Http.instance.doGet('/articles' + params, auth).then(function (response) {
+            return response.json();
+        }).then(r => {
+            const articlesCount = r.articlesCount;
+            this.$globalFeed.textContent = '';
+            r.articles.forEach(article => {
+                this.generateArticle(article);
+            });
+            if (r.articles.length === 0) {
+                this.$globalFeed.innerHTML = '<div class="article-preview">No articles are here... yet. </div>';
+            }
+
+            this.createNavigation(articlesCount);
+        });
+    }
+
+
+    fetchNextArticle(params, auth) {
         this.cleanGlobalFeed();
         this.$globalFeed.innerHTML = '<div class="article-preview">Loading articles </div>';
 
@@ -119,7 +187,7 @@ export class HomeComponent extends HTMLElement {
             r.articles.forEach(article => {
                 this.generateArticle(article);
             });
-            if(r.articles.length === 0) {
+            if (r.articles.length === 0) {
                 this.$globalFeed.innerHTML = '<div class="article-preview">No articles are here... yet. </div>';
             }
         });
@@ -163,6 +231,16 @@ export class HomeComponent extends HTMLElement {
                         <popular-tags></popular-tags>
                     </div>
                 </div>
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item active">
+                            <a class="page-link" href="">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="">2</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
 `;
