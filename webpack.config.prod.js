@@ -5,7 +5,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     devtool: 'source-map',
-    entry: ['./client/index.js'],
+    entry: ['./app/index.js'],
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'bundle.js'
@@ -13,11 +13,11 @@ module.exports = {
     plugins: [
         new webpack.optimize.OccurrenceOrderPlugin(),
         new HtmlWebpackPlugin({
-            template: './client/index.html'
+            template: './app/index.html'
         }),
 
         new CopyWebpackPlugin([{
-            context: './client',
+            context: './app',
             from: '**/*.html',
         }])
     ],

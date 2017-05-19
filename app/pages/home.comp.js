@@ -1,7 +1,8 @@
+"use strict";
 import {ArticleComponent} from "../components/article.comp";
 import {Authentication} from "../auth/authentication";
 import {RouterHandler} from "../router/router-handler";
-"use strict";
+import {Http} from "../http/http";
 
 
 export class HomeComponent extends HTMLElement {
@@ -12,7 +13,6 @@ export class HomeComponent extends HTMLElement {
             this.auth = Authentication.instance.auth;
         }
 
-        this.$yourFeed = null;
         this.yourFeedHandleEvent = this.yourFeedHandleEvent.bind(this);
         this.globalFeedEventHandle = this.globalFeedEventHandle.bind(this);
         RouterHandler.getInstance.router.navigate('#/');
@@ -40,11 +40,7 @@ export class HomeComponent extends HTMLElement {
             console.log('NOT AUTHORIZED');
         } else {
             this.$yourFeedButton.addEventListener('click', this.yourFeedHandleEvent);
-            this.fetchArticles('/feed', {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json',
-                'Authorization': 'Token ' + this.auth.token
-            });
+            this.fetchArticles('/feed', true);
             console.log('AUTHORIZED');
         }
 
@@ -69,11 +65,7 @@ export class HomeComponent extends HTMLElement {
         this.removeCurrentTagFilter();
         this.$yourFeedButton.classList.add('active');
         this.$globalFeedButton.classList.remove('active');
-        this.fetchArticles('/feed', {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-            'Authorization': 'Token ' + this.auth.token
-        });
+        this.fetchArticles('/feed', true);
     }
 
     generateArticle(article) {
@@ -116,12 +108,11 @@ export class HomeComponent extends HTMLElement {
 
 
 
-    fetchArticles(params, headers) {
+    fetchArticles(params, auth) {
         this.cleanGlobalFeed();
         this.$globalFeed.innerHTML = '<div class="article-preview">Loading articles </div>';
-        fetch('https://conduit.productionready.io/api/articles' + params, {
-            headers: headers
-        }).then(function (response) {
+
+        Http.instance.doGet('/articles' + params, auth).then(function (response) {
             return response.json();
         }).then(r => {
             this.$globalFeed.textContent = '';

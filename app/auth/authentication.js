@@ -6,21 +6,11 @@ export class Authentication {
             throw new Error('use instance');
         }
 
-        var unparsedAuth = localStorage.getItem('auth');
-        if (unparsedAuth) {
-            this._auth = JSON.parse(unparsedAuth);
-        }
         this._callbacks = [];
         return Authentication.inst;
     }
 
     get auth() {
-        if (this._auth) {
-            var unparsedAuth = localStorage.getItem('auth');
-            if (unparsedAuth) {
-                this._auth = JSON.parse(unparsedAuth);
-            }
-        }
         return JSON.parse(localStorage.getItem('auth'));
     }
 

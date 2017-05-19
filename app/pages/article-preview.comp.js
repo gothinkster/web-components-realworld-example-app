@@ -41,7 +41,7 @@ export class ArticlePreviewComponent extends HTMLElement {
         this.$articleActionDate = document.getElementById('article-action-date');
         this.$articleActionFollowUsername = document.getElementById('article-action-follow-username');
         this.$articleActionFavouritesCount = document.getElementById('article-action-favorites-count');
-        this.$commentsWrapper = document.getElementById('comments-wrapper');
+
         // /api/articles/:slug
         fetch('https://conduit.productionready.io/api/articles/' + this.slug).then((response) => {
             return response.json();
@@ -49,13 +49,6 @@ export class ArticlePreviewComponent extends HTMLElement {
             this.article = r.article;
             this.updateArticleContent();
         });
-    }
-
-    generateCommentComponents(comment) {
-        // let newComment = new CommentPreviewComponent();
-        // comment.author.username, comment.body
-        // newComment.setAttribute('username', comment.author.username);
-        // this.$commentsWrapper.appendChild(newComment);
     }
 
     updateArticleContent() {

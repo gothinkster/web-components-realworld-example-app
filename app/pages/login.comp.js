@@ -46,9 +46,7 @@ export class CLoginComponent extends HTMLElement {
                 })
                 .catch(errors => {
                     for (var prop in errors) {
-                        // skip loop if the property is from prototype
                         if(!errors.hasOwnProperty(prop)) continue;
-                        // your code
                         while(this.$errorMessages.firstChild) {
                             this.$errorMessages.removeChild(this.$errorMessages.firstChild);
                         }

@@ -1,7 +1,6 @@
 var Navigo = require('navigo');
 import {CLoginComponent} from "../pages/login.comp";
-import {AuthDefender} from "./auth-defender";
-import {Authentication} from "../auth/authentication";
+import {AuthDefender} from "../auth/auth-defender";
 import {SettingsComponent} from "../pages/settings.comp";
 import {EditorComponent} from "../pages/editor.comp";
 import {ArticlePreviewComponent} from "../pages/article-preview.comp";
@@ -44,7 +43,7 @@ export class RouterHandler {
             {path: '/register', resolve: CRegisterComponent},
             {path: '/profile/:username', resolve: ProfileComponent},
             {path: '/article/:slug', resolve: ArticlePreviewComponent},
-            {path: 'editor', resolve: EditorComponent, canActivate: AuthDefender.canActivate}
+            {path: '/editor', resolve: EditorComponent, canActivate: AuthDefender.canActivate}
         ];
 
         this.router.on(() => {
@@ -73,5 +72,4 @@ export class RouterHandler {
     }
 }
 RouterHandler.instance = null;
-new RouterHandler();
 

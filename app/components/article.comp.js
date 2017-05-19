@@ -1,4 +1,5 @@
 import {RouterHandler} from "../router/router-handler";
+import {Authentication} from "../auth/authentication";
 "use strict";
 
 export class ArticleComponent extends HTMLElement {
@@ -10,8 +11,6 @@ export class ArticleComponent extends HTMLElement {
             heart: 0
         };
         this.updateHearts = this.updateHearts.bind(this);
-
-        this.$tagList = null;
     }
 
     static get observedAttributes() {
@@ -29,7 +28,6 @@ export class ArticleComponent extends HTMLElement {
 
     connectedCallback() {
         this.innerHTML = this.render();
-        // this.$tagList = this.querySelector('ul.tag-list');
         const button = this.querySelector('#ion-heart');
         button.addEventListener('click', this.updateHearts);
 
@@ -47,10 +45,59 @@ export class ArticleComponent extends HTMLElement {
     }
 
 
-    updateHearts() {
-        var span = this.querySelector('#ion-heart > span');
-        this.model.favoritesCount = this.model.favoritesCount + 1;
-        span.innerHTML = this.model.favoritesCount;
+    updateHearts(e) {
+        e.preventDefault();
+        var auth = Authentication.instance.auth;
+        if (!auth) {
+            RouterHandler.getInstance.router.navigate('#/login');
+        }
+        let headers = {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+            'Authorization': 'Token ' + auth.token
+        };
+        console.log(this.model);
+        if (this.model.favorited) {
+            this.unfavoritArticle(headers);
+        } else {
+            this.favoriteArticle(headers);
+        }
+        // POST /api/articles/:slug/favorite
+
+        // DELETE /api/articles/:slug/favorite
+    }
+
+
+    favoriteArticle(headers) {
+        fetch('https://conduit.productionready.io/api/articles/' + this.model.slug + '/favorite', {
+            headers: headers,
+            method: 'POST'
+        }).then(function (response) {
+            return response.json();
+        }).then(r => {
+            console.log(r);
+            this.model.favorited = r.article.favorited;
+            var span = this.querySelector('#ion-heart > span');
+            span.parentNode.classList.add('active');
+            this.model.favoritesCount = this.model.favoritesCount + 1;
+            span.innerHTML = this.model.favoritesCount;
+        });
+    }
+
+    unfavoritArticle(headers) {
+        fetch('https://conduit.productionready.io/api/articles/' + this.model.slug + '/favorite', {
+            headers: headers,
+            method: 'DELETE'
+        }).then(function (response) {
+            return response.json();
+        }).then(r => {
+            console.log(r);
+            this.model.favorited = r.article.favorited;
+            var span = this.querySelector('#ion-heart > span');
+            this.model.favoritesCount = this.model.favoritesCount - 1;
+            span.parentNode.classList.remove('active');
+            span.innerHTML = this.model.favoritesCount;
+        });
     }
 
 
@@ -65,7 +112,7 @@ export class ArticleComponent extends HTMLElement {
                         <a id="author" href="/profile/${this.model.author.username}" class="author">${this.model.author.username}</a>
                         <span class="date">${this.model.createdAt}</span>
                     </div>
-                    <button id="ion-heart" class="btn btn-outline-primary btn-sm pull-xs-right">
+                    <button id="ion-heart" class="btn btn-outline-primary btn-sm pull-xs-right ${this.model.favorited ? 'active' : ''}">
                         <i class="ion-heart"></i> <span>${this.model.favoritesCount}</span>
                     </button>
                 </div>
@@ -80,7 +127,7 @@ export class ArticleComponent extends HTMLElement {
                             ${tag}
                             </li>
                             `;
-                        }).join(' ')}
+                         }).join(' ')}
                     </ul>
                 </a>
             </div>

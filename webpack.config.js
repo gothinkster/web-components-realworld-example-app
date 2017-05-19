@@ -2,14 +2,14 @@ var webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-    template: './client/index.html',
+    template: './app/index.html',
     filename: 'index.html',
     inject: 'body',
 });
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: ['./client/index.js'],
+    entry: ['./app/index.js'],
     output: {
         path: path.resolve('dist'),
         filename: 'index_bundle.js'
@@ -26,7 +26,7 @@ module.exports = {
         ]
     },
     plugins: [HtmlWebpackPluginConfig, new webpack.HotModuleReplacementPlugin(), new CopyWebpackPlugin([{
-        context: './client',
+        context: './app',
         from: '**/*.html',
     }])],
     devServer: {

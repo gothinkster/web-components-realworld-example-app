@@ -83,7 +83,6 @@ export class CNavComponent extends HTMLElement {
 
     setCurrentActive() {
         let curUrl = location.hash;
-        console.log(curUrl);
         this.updateActive(curUrl);
     }
 
