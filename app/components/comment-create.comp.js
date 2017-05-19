@@ -44,7 +44,7 @@ export class CommentCreateComponent extends HTMLElement {
         return `
         <form class="card comment-form">
           <div class="card-block">
-            <textarea id="comment-value" class="form-control" placeholder="TODO - Write a comment..." rows="3"></textarea>
+            <textarea id="comment-value" class="form-control" placeholder="Write a comment..." rows="3"></textarea>
           </div>
           <div class="card-footer">
             <img src="${this.image ? this.image : 'https://static.productionready.io/images/smiley-cyrus.jpg'}" class="comment-author-img" />

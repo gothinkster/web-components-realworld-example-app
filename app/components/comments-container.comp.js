@@ -33,13 +33,16 @@ export class CommentsContainerComponent extends HTMLElement {
     render() {
         return `
             ${this.comments.map(comment => {
-                    return `
+            return `
                         <comment-preview 
                             username="${comment.author.username}" 
-                            content="${comment.body}">
+                            content="${comment.body}"
+                            image="${comment.author.image}"
+                            created-at="${comment.createdAt}"
+                        >
                         </comment-preview>
                     `;
-            }).join(' ')}
+        }).join(' ')}
             
         `;
     }

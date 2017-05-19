@@ -7,8 +7,8 @@ export class CommentPreviewComponent extends HTMLElement {
         super();
         this._username = null;
         this._content = null;
-        this.authorImage = null;
-        this.createdAt = null;
+        this._image = null;
+        this._createdAt = null;
 
         this.$authorUsername = null;
         this.$authorImage = null;
@@ -19,7 +19,7 @@ export class CommentPreviewComponent extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['username', 'content']; //, 'authorImage', 'createdAt', 'content'
+        return ['username', 'content', 'image', 'created-at']; //, 'authorImage', 'createdAt', 'content'
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -27,9 +27,19 @@ export class CommentPreviewComponent extends HTMLElement {
         switch (name) {
             case 'username' : {
                 this._username = newValue;
+                break;
             }
             case 'content': {
                 this._content = newValue;
+                break;
+            }
+            case 'image': {
+                this._image = newValue;
+                break;
+            }
+            case 'created-at': {
+                this._createdAt = newValue;
+                break;
             }
         }
 
@@ -68,11 +78,27 @@ export class CommentPreviewComponent extends HTMLElement {
         this.setAttribute('content', value)
     }
 
+    get createdAt() {
+        return this._createdAt;
+    }
+
+    set createdAt(value) {
+        this.setAttribute('created_at', value);
+    }
+
+    get image() {
+        return this._image;
+    }
+
+    set image(value) {
+         this.setAttribute('image', value);
+    }
+
 
     updateScreen() {
         if (this.$authorUsername) {//dom is rendered
             this.$authorUsername.textContent = this._username;
-            this.$authorImage.textContent = this.authorImage;
+            this.$authorImage.textContent = this.image;
             this.$createdAt.textContent = this.createdAt;
             this.$content.textContent = this.content;
         }
@@ -92,7 +118,7 @@ export class CommentPreviewComponent extends HTMLElement {
           </div>
           <div class="card-footer">
             <a href="" class="comment-author">
-              <img id="author-image" src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
+              <img id="author-image" src="${this.image}" class="comment-author-img" />
             </a>
             &nbsp;
             <a id="author-username" href="#/profile/${this.username}" class="comment-author"></a>

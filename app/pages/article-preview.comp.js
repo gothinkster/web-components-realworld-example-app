@@ -43,13 +43,18 @@ export class ArticlePreviewComponent extends HTMLElement {
     }
 
     onCommentPost(e) {
-        this.$commentsContainer.comments.unshift({
-            author: {
-                username: 'admir'
-            },
-            body: e.detail
-        });
-        this.$commentsContainer.refresh();
+        if (e.detail && e.detail.length > 0) {
+            const comment = {
+                "comment": {
+                    "body": e.detail
+                }
+            };
+            Http.instance.doPost('/articles/' + this.slug + '/comments', JSON.stringify(comment), true).then(response => {
+                console.log(response);
+                this.$commentsContainer.comments.unshift(response.comment);
+                this.$commentsContainer.refresh();
+            });
+        }
     }
 
     updateArticlePreviewBanner() {
