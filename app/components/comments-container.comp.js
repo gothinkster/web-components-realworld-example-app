@@ -26,6 +26,10 @@ export class CommentsContainerComponent extends HTMLElement {
 
     }
 
+    refresh() {
+        this.innerHTML = this.render();
+    }
+
     render() {
         return `
             ${this.comments.map(comment => {

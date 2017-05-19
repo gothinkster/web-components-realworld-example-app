@@ -40,7 +40,6 @@ export class CNavComponent extends HTMLElement {
     }
 
     increment() {
-        console.log('a click');
     }
 
 

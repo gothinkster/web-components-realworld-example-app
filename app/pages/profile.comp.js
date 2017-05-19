@@ -1,4 +1,6 @@
 import {ArticleComponent} from "../components/article.comp";
+import {Http} from "../http/http";
+import {Authentication} from "../auth/authentication";
 "use strict";
 
 
@@ -6,16 +8,10 @@ export class ProfileComponent extends HTMLElement {
     constructor(params) {
         super();
         this.username = params.username;
-        this.model = null;
-
-        this.$username = null;
-        this.$bio = null;
-        this.userImg = null;
-        this.followButton = null;
-        this.followButtonUsername = null;
 
         this.myArticlesButtonHandler = this.myArticlesButtonHandler.bind(this);
         this.favoritedArticlesButtonHandler = this.favoritedArticlesButtonHandler.bind(this);
+        this.auth = Authentication.instance.auth;
     }
 
     static get observedAttributes() {
@@ -29,19 +25,6 @@ export class ProfileComponent extends HTMLElement {
     connectedCallback() {
         const el = this.render();
         this.innerHTML = el;
-
-        this.$username = document.getElementById('username');
-        this.$bio = document.getElementById('bio');
-        this.userImg = document.getElementById('user-img');
-        this.followButton = document.getElementById('follow-button');
-        this.followButtonUsername = document.getElementById('follow-button-username');
-
-        fetch('https://conduit.productionready.io/api/profiles/' + this.username).then((response) => {
-            return response.json();
-        }).then(r => {
-            this.model = r.profile;
-            this.updateUserProfileDom();
-        });
 
         this.$globalFeed = this.querySelector('#globalFeed');
         this.$myArticlesButton = this.querySelector('#my-articles');
@@ -67,20 +50,10 @@ export class ProfileComponent extends HTMLElement {
         this.$myArticlesButton.classList.remove('active');
     }
 
-
-    updateUserProfileDom() {
-        this.$username.textContent = this.model.username;
-        this.followButtonUsername.textContent = this.model.username;
-        this.$bio.textContent = this.model.bio;
-        this.userImg.setAttribute('src', this.model.image);
-    }
-
-    fetchArticles(params, headers) {
+    fetchArticles(params) {
         this.cleanGlobalFeed();
         this.$globalFeed.innerHTML = '<div class="article-preview">Loading articles </div>';
-        fetch('https://conduit.productionready.io/api/articles' + params, {
-            headers: headers
-        }).then(function (response) {
+        Http.instance.doGet('articles' + params, true).then(function (response) {
             return response.json();
         }).then(r => {
             this.$globalFeed.textContent = '';
@@ -113,26 +86,8 @@ export class ProfileComponent extends HTMLElement {
     render() {
         return `
                <div class="profile-page">
-                  <div class="user-info">
-                    <div class="container">
-                      <div class="row">
-                
-                        <div class="col-xs-12 col-md-10 offset-md-1">
-                          <img id="user-img" src="https://static.productionready.io/images/smiley-cyrus.jpg" class="user-img" />
-                          <h4 id="username"></h4>
-                          <p id="bio">
-                            
-                          </p>
-                          <button id="follow-button" class="btn btn-sm btn-outline-secondary action-btn">
-                            <i class="ion-plus-round"></i>
-                            &nbsp;
-                            Follow <span id="follow-button-username"></span>
-                          </button>
-                        </div>
-                
-                      </div>
-                    </div>
-                  </div>
+                  <user-info username="${this.username}"></user-info>
+                 
                 
                   <div class="container">
                     <div class="row">

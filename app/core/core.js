@@ -12,6 +12,9 @@ import {EditorComponent} from "../pages/editor.comp";
 import {SettingsComponent} from "../pages/settings.comp";
 import {PopularTagsComponent} from "../components/popular-tags.comp";
 import {CommentsContainerComponent} from "../components/comments-container.comp";
+import {UserInfoComponent} from "../components/user-info.comp";
+import {ArticlePreviewBannerComponent} from "../components/article-preview-banner";
+import {CommentCreateComponent} from "../components/comment-create.comp";
 
 export class Core {
     constructor() {
@@ -81,5 +84,17 @@ const components = [
     {
         tagName: 'popular-tags',
         component: PopularTagsComponent
+    },
+    {
+        tagName: 'user-info',
+        component: UserInfoComponent
+    },
+    {
+        tagName: 'article-preview-banner',
+        component: ArticlePreviewBannerComponent
+    },
+    {
+        tagName: 'comment-create',
+        component: CommentCreateComponent
     }
 ];

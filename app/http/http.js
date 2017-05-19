@@ -24,7 +24,10 @@ export class Http {
         };
 
         if (authentication === true) {
-            headers['Authorization'] = 'Token ' + Authentication.instance.auth.token;
+            const auth = Authentication.instance.auth;
+            if(auth) {
+                headers['Authorization'] = 'Token ' + auth.token;
+            }
         }
         return fetch(config.rest_url + path, {
             headers: headers
@@ -42,6 +45,12 @@ export class Http {
             var token = null;
             if (auth) {
                 token = auth.token;
+            } else {
+                //stop immediately
+                RouterHandler.instance.router.navigate('#/login');
+                return new Promise((resolve, rej) => {
+                    rej();
+                });
             }
             headers['Authorization'] = 'Token ' + token;
         }
