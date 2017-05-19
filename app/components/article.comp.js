@@ -1,9 +1,8 @@
 import {RouterHandler} from "../router/router-handler";
-import {Authentication} from "../auth/authentication";
+import {Http} from "../http/http";
 "use strict";
 
 export class ArticleComponent extends HTMLElement {
-//todo generate tag list
     constructor() {
         super();
         this.model = {
@@ -18,7 +17,6 @@ export class ArticleComponent extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log(name);
     }
 
     disconnectedCallback() {
@@ -47,35 +45,16 @@ export class ArticleComponent extends HTMLElement {
 
     updateHearts(e) {
         e.preventDefault();
-        var auth = Authentication.instance.auth;
-        if (!auth) {
-            RouterHandler.getInstance.router.navigate('#/login');
-        }
-        let headers = {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-            'Authorization': 'Token ' + auth.token
-        };
-        console.log(this.model);
         if (this.model.favorited) {
-            this.unfavoritArticle(headers);
+            this.unfavoritArticle();
         } else {
-            this.favoriteArticle(headers);
+            this.favoriteArticle();
         }
-        // POST /api/articles/:slug/favorite
-
-        // DELETE /api/articles/:slug/favorite
     }
 
 
-    favoriteArticle(headers) {
-        fetch('https://conduit.productionready.io/api/articles/' + this.model.slug + '/favorite', {
-            headers: headers,
-            method: 'POST'
-        }).then(function (response) {
-            return response.json();
-        }).then(r => {
-            console.log(r);
+    favoriteArticle() {
+        Http.instance.doPost('/articles/' + this.model.slug + '/favorite', JSON.stringify({}), true).then(r => {
             this.model.favorited = r.article.favorited;
             var span = this.querySelector('#ion-heart > span');
             span.parentNode.classList.add('active');
@@ -84,14 +63,8 @@ export class ArticleComponent extends HTMLElement {
         });
     }
 
-    unfavoritArticle(headers) {
-        fetch('https://conduit.productionready.io/api/articles/' + this.model.slug + '/favorite', {
-            headers: headers,
-            method: 'DELETE'
-        }).then(function (response) {
-            return response.json();
-        }).then(r => {
-            console.log(r);
+    unfavoritArticle() {
+        Http.instance.doDelete('/articles/' + this.model.slug + '/favorite', true).then(r => {
             this.model.favorited = r.article.favorited;
             var span = this.querySelector('#ion-heart > span');
             this.model.favoritesCount = this.model.favoritesCount - 1;
@@ -103,34 +76,34 @@ export class ArticleComponent extends HTMLElement {
 
     render() {
         return `
-            <div class="article-preview">
-                <div class="article-meta">
-                    <a href="profile.html">
-                        <img src="${this.model.author.image}"/>
-                    </a>
-                    <div class="info">
-                        <a id="author" href="/profile/${this.model.author.username}" class="author">${this.model.author.username}</a>
-                        <span class="date">${this.model.createdAt}</span>
-                    </div>
-                    <button id="ion-heart" class="btn btn-outline-primary btn-sm pull-xs-right ${this.model.favorited ? 'active' : ''}">
-                        <i class="ion-heart"></i> <span>${this.model.favoritesCount}</span>
-                    </button>
-                </div>
-                <a id="preview-link" href="#/article/${this.model.slug}" class="preview-link">
-                    <h1>${this.model.title}</h1>
-                    <p>${this.model.description ? this.model.description : ''}</p>
-                    <span>Read more...</span>
-                    <ul class="tag-list">
-                        ${this.model.tagList.map(tag => {
-                            return `
-                            <li class="tag-default tag-pill tag-outline">
-                            ${tag}
-                            </li>
-                            `;
-                         }).join(' ')}
-                    </ul>
-                </a>
-            </div>
+<div class="article-preview">
+    <div class="article-meta">
+        <a href="profile.html">
+            <img src="${this.model.author.image}"/>
+        </a>
+        <div class="info">
+            <a id="author" href="/profile/${this.model.author.username}" class="author">${this.model.author.username}</a>
+            <span class="date">${this.model.createdAt}</span>
+        </div>
+        <button id="ion-heart" class="btn btn-outline-primary btn-sm pull-xs-right ${this.model.favorited ? 'active' : ''}">
+            <i class="ion-heart"></i> <span>${this.model.favoritesCount}</span>
+        </button>
+    </div>
+    <a id="preview-link" href="#/article/${this.model.slug}" class="preview-link">
+        <h1>${this.model.title}</h1>
+        <p>${this.model.description ? this.model.description : ''}</p>
+        <span>Read more...</span>
+        <ul class="tag-list">
+            ${this.model.tagList.map(tag => {
+            return `
+                <li class="tag-default tag-pill tag-outline">
+                ${tag}
+                </li>
+                `;
+        }).join(' ')}
+        </ul>
+    </a>
+</div>
         `;
     }
 

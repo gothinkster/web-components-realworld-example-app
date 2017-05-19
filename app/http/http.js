@@ -1,5 +1,6 @@
 import {Authentication} from "../auth/authentication";
-import {config} from '../config';
+import {config} from "../config";
+import {RouterHandler} from "../router/router-handler";
 
 export class Http {
     constructor() {
@@ -22,11 +23,63 @@ export class Http {
             'Content-Type': 'application/json',
         };
 
-        if(authentication === true) {
+        if (authentication === true) {
             headers['Authorization'] = 'Token ' + Authentication.instance.auth.token;
         }
         return fetch(config.rest_url + path, {
             headers: headers
+        });
+    }
+
+    doPost(path, body, authentication) {
+        const headers = {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+        };
+
+        if (authentication === true) {
+            const auth = Authentication.instance.auth;
+            var token = null;
+            if (auth) {
+                token = auth.token;
+            }
+            headers['Authorization'] = 'Token ' + token;
+        }
+        return fetch(config.rest_url + path, {
+            headers: headers,
+            method: 'POST',
+            body: body
+        }).then(response => {
+            if (response.status === 401) {
+                RouterHandler.instance.router.navigate('#/login');
+            }
+            return response.json();
+        });
+    }
+
+    doDelete(path, authentication) {
+        const headers = {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+        };
+
+        if (authentication === true) {
+            const auth = Authentication.instance.auth;
+            var token = null;
+            if (auth) {
+                token = auth.token;
+            }
+            headers['Authorization'] = 'Token ' + token;
+        }
+
+        return fetch(config.rest_url + path, {
+            headers: headers,
+            method: 'DELETE'
+        }).then(function (response) {
+            if (response.status === 401) {
+                RouterHandler.instance.router.navigate('#/login');
+            }
+            return response.json();
         });
     }
 }
