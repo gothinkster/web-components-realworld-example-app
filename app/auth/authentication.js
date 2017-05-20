@@ -42,7 +42,7 @@ export class Authentication {
                     this.auth = res.user;
                     resolve(res.user);
                     setTimeout(() => {
-                        this._callbacks.forEach(callback => callback(res.user))
+                        this._callbacks.forEach(callback => callback(res.user));
                     });
                 } else {
                     reject(res.errors)

@@ -56,12 +56,13 @@ export class SettingsComponent extends HTMLElement {
               </button>
           </fieldset>
         </form>
+        <hr>
+        <button id="logoutButton" class="btn btn-outline-danger">Or click here to logout.</button>
       </div>
 
     </div>
   </div>
 </div>
-            <a href="#" id="logoutButton">logout</a>
         `;
     }
 
