@@ -5,7 +5,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     devtool: 'source-map',
-    entry: ['./app/index.js'],
+    entry: ['whatwg-fetch', './app/index.js'],
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'bundle.js'
@@ -19,7 +19,8 @@ module.exports = {
         new CopyWebpackPlugin([{
             context: './app',
             from: '**/*.html',
-        }])
+        }]),
+        new webpack.IgnorePlugin(/vertx/)
     ],
     module: {
         loaders: [

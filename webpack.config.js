@@ -9,7 +9,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: ['./app/index.js'],
+    entry: ['whatwg-fetch', './app/index.js'],
     output: {
         path: path.resolve('dist'),
         filename: 'index_bundle.js'
@@ -28,7 +28,7 @@ module.exports = {
     plugins: [HtmlWebpackPluginConfig, new webpack.HotModuleReplacementPlugin(), new CopyWebpackPlugin([{
         context: './app',
         from: '**/*.html',
-    }])],
+    }]), new webpack.IgnorePlugin(/vertx/)],
     devServer: {
         hot: true,
         contentBase: './',

@@ -11,8 +11,10 @@
     "prod": "cp serve.js dist/serve.js && node serve.js"
   },
   "dependencies": {
+    "@webcomponents/webcomponentsjs": "git://github.com/webcomponents/webcomponentsjs.git#v1.0.0",
     "markdown": "^0.5.0",
-    "navigo": "^4.7.1"
+    "navigo": "^4.7.1",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
