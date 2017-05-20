@@ -8,7 +8,6 @@ export class SettingsComponent extends HTMLElement {
         this.$logoutButton = null;
         this.logoutHandler = this.logoutHandler.bind(this);
         this.updateHandler = this.updateHandler.bind(this);
-        // /api/user
     }
 
     static get observedAttributes() {
@@ -16,8 +15,6 @@ export class SettingsComponent extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-//api/user PUT
-
 
     }
 
@@ -82,7 +79,6 @@ export class SettingsComponent extends HTMLElement {
                     RouterHandler.getInstance.router.navigate('/');
                 }
             });
-            console.log('form handle');
         }
     }
 

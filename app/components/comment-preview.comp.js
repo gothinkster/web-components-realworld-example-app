@@ -1,4 +1,5 @@
 import {RouterHandler} from "../router/router-handler";
+import {formatDate} from "../date-util";
 "use strict";
 
 export class CommentPreviewComponent extends HTMLElement {
@@ -99,7 +100,7 @@ export class CommentPreviewComponent extends HTMLElement {
         if (this.$authorUsername) {//dom is rendered
             this.$authorUsername.textContent = this._username;
             this.$authorImage.textContent = this.image;
-            this.$createdAt.textContent = this.createdAt;
+            this.$createdAt.textContent = formatDate(this.createdAt);
             this.$content.textContent = this.content;
         }
     }

@@ -1,5 +1,6 @@
 import {Authentication} from "../auth/authentication";
 import {Http} from "../http/http";
+import {formatDate} from "../date-util";
 export class ArticlePreviewBannerComponent extends HTMLElement {
 
     constructor() {
@@ -151,7 +152,7 @@ export class ArticlePreviewBannerComponent extends HTMLElement {
                         </a>
                         <div class="info">
                           <a id="profile-username" href="#/profile/${this._username}" class="author">${this._username}</a>
-                          <span id="article-date" class="date">${this.date}</span>
+                          <span id="article-date" class="date">${formatDate(this.date)}</span>
                         </div>
 ${
             this.auth && this.auth.username === this.username ?

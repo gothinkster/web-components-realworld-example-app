@@ -1,5 +1,6 @@
 import {RouterHandler} from "../router/router-handler";
 import {Http} from "../http/http";
+import {formatDate} from "../date-util";
 "use strict";
 
 export class ArticleComponent extends HTMLElement {
@@ -83,7 +84,7 @@ export class ArticleComponent extends HTMLElement {
         </a>
         <div class="info">
             <a id="author" href="#/profile/${this.model.author.username}" class="author">${this.model.author.username}</a>
-            <span class="date">${this.model.createdAt}</span>
+            <span class="date">${formatDate(this.model.createdAt)}</span>
         </div>
         <button id="ion-heart" class="btn btn-outline-primary btn-sm pull-xs-right ${this.model.favorited ? 'active' : ''}">
             <i class="ion-heart"></i> <span>${this.model.favoritesCount}</span>
