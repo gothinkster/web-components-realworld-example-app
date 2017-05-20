@@ -66,6 +66,38 @@ export class Http {
         });
     }
 
+    doPut(path, body, authentication) {
+        const headers = {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+        };
+
+        if (authentication === true) {
+            const auth = Authentication.instance.auth;
+            var token = null;
+            if (auth) {
+                token = auth.token;
+            } else {
+                //stop immediately
+                RouterHandler.instance.router.navigate('#/login');
+                return new Promise((resolve, rej) => {
+                    rej();
+                });
+            }
+            headers['Authorization'] = 'Token ' + token;
+        }
+        return fetch(config.rest_url + path, {
+            headers: headers,
+            method: 'PUT',
+            body: body
+        }).then(response => {
+            if (response.status === 401) {
+                RouterHandler.instance.router.navigate('#/login');
+            }
+            return response.json();
+        });
+    }
+
     doDelete(path, authentication) {
         const headers = {
             'Accept': 'application/json, text/plain, */*',
