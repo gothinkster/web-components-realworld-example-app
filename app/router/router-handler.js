@@ -43,6 +43,7 @@ export class RouterHandler {
             {path: '/register', resolve: CRegisterComponent},
             {path: '/profile/:username', resolve: ProfileComponent},
             {path: '/article/:slug', resolve: ArticlePreviewComponent},
+            {path: '/editor/:slug', resolve: EditorComponent, canActivate: AuthDefender.canActivate},
             {path: '/editor', resolve: EditorComponent, canActivate: AuthDefender.canActivate}
         ];
 

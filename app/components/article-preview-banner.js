@@ -158,8 +158,8 @@ ${
             this.auth && this.auth.username === this.username ?
                 `
                 <span>
-                <a class="btn btn-outline-secondary btn-sm" href="#/editor/asdasd-d1z1f3">
-                    <i class="ion-edit"></i>TODO Edit Article
+                <a class="btn btn-outline-secondary btn-sm" href="#/editor/${this._slug}">
+                    <i class="ion-edit"></i>Edit Article
                 </a>
                 <button class="btn btn-outline-danger btn-sm"><i class="ion-trash-a">
                     </i>TODO Delete Article</button>

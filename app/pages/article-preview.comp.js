@@ -58,6 +58,7 @@ export class ArticlePreviewComponent extends HTMLElement {
     }
 
     updateArticlePreviewBanner() {
+        this.$articlePreviewBanner._slug = this.article.slug;
         this.$articlePreviewBanner.setAttribute('title', this.article.title);
         this.$articlePreviewBanner.setAttribute('username', this.article.author.username);
         this.$articlePreviewBanner.setAttribute('favorites-count', this.article.favoritesCount);
@@ -65,7 +66,6 @@ export class ArticlePreviewComponent extends HTMLElement {
         this.$articlePreviewBanner.setAttribute('image', this.article.author.image);
         this.$articlePreviewBanner.setAttribute('following', this.article.author.following);
         this.$articlePreviewBanner.setAttribute('favorited', this.article.favorited);
-        this.$articlePreviewBanner._slug = this.article.slug;
     }
 
     updateArticleContent() {
