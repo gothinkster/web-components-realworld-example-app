@@ -13,11 +13,10 @@ We've gone to great lengths to adhere to the Vanilla JS community styleguides & 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
 
-# How it works
-
-> Describe the general architecture of your app here
-
 # Getting started
 
-> npm install, npm start, etc.
+`yarn`
 
+`yarn start`
+
+Open `localhost:8080` to view the website.
