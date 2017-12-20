@@ -19,4 +19,4 @@ For more information on how to this works with other frontends/backends, head ov
 
 `yarn start`
 
-Open `localhost:8080` to view the website.
+Open `localhost:8080` to view the app.
