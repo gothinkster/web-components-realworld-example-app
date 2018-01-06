@@ -14,12 +14,12 @@ export class CommentsContainerComponent extends HTMLElement {
 
     connectedCallback() {
         this.slug = this.getAttribute('slug');
-        fetch('https://conduit.productionready.io/api/articles/' + this.slug + '/comments').then((response) => {
-            return response.json();
-        }).then(r => {
-            this.comments = r.comments;
-            this.innerHTML = this.render();
-        });
+        fetch('https://conduit.productionready.io/api/articles/' + this.slug + '/comments')
+            .then(response => response.json())
+            .then(r => {
+                this.comments = r.comments;
+                this.innerHTML = this.render();
+            });
     }
 
     disconnectedCallback() {
@@ -32,18 +32,16 @@ export class CommentsContainerComponent extends HTMLElement {
 
     render() {
         return `
-            ${this.comments.map(comment => {
-            return `
-                        <comment-preview 
-                            username="${comment.author.username}" 
-                            content="${comment.body}"
-                            image="${comment.author.image}"
-                            created-at="${comment.createdAt}"
-                        >
-                        </comment-preview>
-                    `;
-        }).join(' ')}
-            
+            ${this.comments.map(comment => `
+                <comment-preview 
+                    username="${comment.author.username}" 
+                    content="${comment.body}"
+                    image="${comment.author.image}"
+                    created-at="${comment.createdAt}"
+                >
+                </comment-preview>
+            `
+            }).join(' ')}
         `;
     }
 }
