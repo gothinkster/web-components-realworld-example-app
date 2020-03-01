@@ -41,7 +41,7 @@ export class CommentsContainerComponent extends HTMLElement {
                 >
                 </comment-preview>
             `
-            }).join(' ')}
+            ).join(' ')}
         `;
     }
 }
