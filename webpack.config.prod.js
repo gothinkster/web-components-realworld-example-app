@@ -1,35 +1,33 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    devtool: 'source-map',
-    entry: ['whatwg-fetch', './app/index.js'],
-    output: {
-        path: path.join(__dirname, 'dist'),
-        filename: 'bundle.js'
-    },
-    plugins: [
-        new webpack.optimize.OccurrenceOrderPlugin(),
-        new HtmlWebpackPlugin({
-            template: './app/index.html'
-        }),
-
-        new CopyWebpackPlugin([{
-            context: './app',
-            from: '**/*.html',
-        }]),
-        new webpack.IgnorePlugin(/vertx/)
-    ],
-    module: {
-        loaders: [
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                exclude: /node_modules/,
-                query: {plugins: ['transform-decorators-legacy']}
-            }
-        ]
-    }
-}
+  mode: 'production',
+  devtool: 'source-map',
+  entry: ['whatwg-fetch', './app/index.js'],
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './app/index.html'
+    }),
+    new webpack.IgnorePlugin(/vertx/)
+  ]
+};
