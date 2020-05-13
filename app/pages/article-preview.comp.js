@@ -1,9 +1,7 @@
 import {Http} from "../http/http";
-"use strict";
 var markdown = require("markdown").markdown;
 
-
-export class ArticlePreviewComponent extends HTMLElement {
+class ArticlePreviewComponent extends HTMLElement {
     constructor(params) {
         super();
         this.slug = params.slug;
@@ -105,3 +103,6 @@ export class ArticlePreviewComponent extends HTMLElement {
 
 
 }
+
+window.customElements.define('article-preview', ArticlePreviewComponent);
+export default ArticlePreviewComponent;
