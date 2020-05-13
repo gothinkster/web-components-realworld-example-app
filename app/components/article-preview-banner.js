@@ -1,6 +1,7 @@
-import {Authentication} from "../auth/authentication";
-import {Http} from "../http/http";
-import {formatDate} from "../date-util";
+import {Authentication} from "../auth/authentication.js";
+import {Http} from "../http/http.js";
+import {formatDate} from "../date-util.js";
+
 export class ArticlePreviewBannerComponent extends HTMLElement {
 
     constructor() {

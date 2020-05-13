@@ -1,4 +1,3 @@
-"use strict";
 export class RouterOutlet extends HTMLElement {
     constructor() {
         super();

@@ -1,11 +1,11 @@
 var Navigo = require('navigo');
-import {CLoginComponent} from "../pages/login.comp";
-import {AuthDefender} from "../auth/auth-defender";
-import {SettingsComponent} from "../pages/settings.comp";
-import {EditorComponent} from "../pages/editor.comp";
-import {ProfileComponent} from "../pages/profile.comp";
-import {CRegisterComponent} from "../pages/register.comp";
-import {HomeComponent} from "../pages/home.comp";
+import {CLoginComponent} from "../pages/login.comp.js";
+import {AuthDefender} from "../auth/auth-defender.js";
+import {SettingsComponent} from "../pages/settings.comp.js";
+import {EditorComponent} from "../pages/editor.comp.js";
+import {ProfileComponent} from "../pages/profile.comp.js";
+import {CRegisterComponent} from "../pages/register.comp.js";
+import {HomeComponent} from "../pages/home.comp.js";
 
 
 export class RouterHandler {

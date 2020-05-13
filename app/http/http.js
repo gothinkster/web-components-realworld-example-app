@@ -1,6 +1,6 @@
-import {Authentication} from "../auth/authentication";
-import {config} from "../config";
-import {RouterHandler} from "../router/router-handler";
+import {Authentication} from "../auth/authentication.js";
+import {config} from "../config.js";
+import {RouterHandler} from "../router/router-handler.js";
 
 export class Http {
     constructor() {

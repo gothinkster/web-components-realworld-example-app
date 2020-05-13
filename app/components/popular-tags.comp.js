@@ -1,5 +1,3 @@
-"use strict";
-
 export class PopularTagsComponent extends HTMLElement {
 
     constructor() {

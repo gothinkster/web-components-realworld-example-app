@@ -1,4 +1,3 @@
-"use strict";
 export function formatDate(dateToFormat) {
     dateToFormat = new Date(dateToFormat);
     var monthNames = [

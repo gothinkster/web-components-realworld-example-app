@@ -1,6 +1,5 @@
-import {Http} from "../http/http";
-import {RouterHandler} from "../router/router-handler";
-"use strict";
+import {Http} from "../http/http.js";
+import {RouterHandler} from "../router/router-handler.js";
 
 export class SettingsComponent extends HTMLElement {
     constructor(params) {

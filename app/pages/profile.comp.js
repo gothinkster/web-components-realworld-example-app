@@ -1,8 +1,6 @@
-import {ArticleComponent} from "../components/article.comp";
-import {Http} from "../http/http";
-import {Authentication} from "../auth/authentication";
-"use strict";
-
+import {ArticleComponent} from "../components/article.comp.js";
+import {Http} from "../http/http.js";
+import {Authentication} from "../auth/authentication.js";
 
 export class ProfileComponent extends HTMLElement {
     constructor(params) {

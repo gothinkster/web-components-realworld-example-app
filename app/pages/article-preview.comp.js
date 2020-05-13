@@ -1,4 +1,4 @@
-import {Http} from "../http/http";
+import {Http} from "../http/http.js";
 var markdown = require("markdown").markdown;
 
 class ArticlePreviewComponent extends HTMLElement {

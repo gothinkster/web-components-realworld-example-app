@@ -1,7 +1,6 @@
-import {RouterHandler} from "../router/router-handler";
-import {Http} from "../http/http";
-import {formatDate} from "../date-util";
-"use strict";
+import {RouterHandler} from "../router/router-handler.js";
+import {Http} from "../http/http.js";
+import {formatDate} from "../date-util.js";
 
 export class ArticleComponent extends HTMLElement {
     constructor() {

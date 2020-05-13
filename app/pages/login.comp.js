@@ -1,6 +1,6 @@
-import {Authentication} from "../auth/authentication";
-import {RouterHandler} from "../router/router-handler";
-"use strict";
+import {Authentication} from "../auth/authentication.js";
+import {RouterHandler} from "../router/router-handler.js";
+
 export class CLoginComponent extends HTMLElement {
     constructor() {
         super();

@@ -1,7 +1,7 @@
-import {Http} from "../http/http";
-import {Authentication} from "../auth/authentication";
-import {RouterHandler} from "../router/router-handler";
-"use strict";
+import {Http} from "../http/http.js";
+import {Authentication} from "../auth/authentication.js";
+import {RouterHandler} from "../router/router-handler.js";
+
 export class CRegisterComponent extends HTMLElement {
     constructor() {
         super();

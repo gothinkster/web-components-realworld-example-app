@@ -1,8 +1,5 @@
-"use strict";
-
-import {RouterHandler} from "../../router/router-handler";
-import {Authentication} from "../../auth/authentication";
-
+import {RouterHandler} from "../../router/router-handler.js";
+import {Authentication} from "../../auth/authentication.js";
 
 export class CNavComponent extends HTMLElement {
     constructor() {

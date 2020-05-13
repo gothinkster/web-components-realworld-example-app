@@ -1,5 +1,6 @@
-import {Authentication} from "../auth/authentication";
-import {Http} from "../http/http";
+import {Authentication} from "../auth/authentication.js";
+import {Http} from "../http/http.js";
+
 export class UserInfoComponent extends HTMLElement {
 
     constructor() {

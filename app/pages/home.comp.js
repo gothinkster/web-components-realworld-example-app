@@ -1,9 +1,7 @@
-"use strict";
-import {ArticleComponent} from "../components/article.comp";
-import {Authentication} from "../auth/authentication";
-import {RouterHandler} from "../router/router-handler";
-import {Http} from "../http/http";
-
+import {ArticleComponent} from "../components/article.comp.js";
+import {Authentication} from "../auth/authentication.js";
+import {RouterHandler} from "../router/router-handler.js";
+import {Http} from "../http/http.js";
 
 export class HomeComponent extends HTMLElement {
     constructor() {

@@ -1,6 +1,5 @@
-import {RouterHandler} from "../router/router-handler";
-import {formatDate} from "../date-util";
-"use strict";
+import {RouterHandler} from "../router/router-handler.js";
+import {formatDate} from "../date-util.js";
 
 export class CommentPreviewComponent extends HTMLElement {
 

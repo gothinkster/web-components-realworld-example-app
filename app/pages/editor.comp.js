@@ -1,6 +1,5 @@
-"use strict";
-import {Http} from "../http/http";
-import {RouterHandler} from "../router/router-handler";
+import {Http} from "../http/http.js";
+import {RouterHandler} from "../router/router-handler.js";
 
 export class EditorComponent extends HTMLElement {
     constructor(params) {

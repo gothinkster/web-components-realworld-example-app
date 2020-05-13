@@ -1,4 +1,5 @@
-import {Authentication} from "../auth/authentication";
+import {Authentication} from "../auth/authentication.js";
+
 export class CommentCreateComponent extends HTMLElement {
     constructor() {
         super();

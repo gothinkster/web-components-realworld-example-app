@@ -1,6 +1,7 @@
-import {CNavComponent} from "./c-nav.comp";
-import {CFooterComponent} from "./c-footer.comp";
-import {CBannerComponent} from "./c-banner.comp";
+import {CNavComponent} from "./c-nav.comp.js";
+import {CFooterComponent} from "./c-footer.comp.js";
+import {CBannerComponent} from "./c-banner.comp.js";
+
 export const layoutComponents = [
     {
         tagName: 'c-nav',
