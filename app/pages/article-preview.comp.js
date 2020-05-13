@@ -1,5 +1,5 @@
+import {markdown} from "https://unpkg.com/es-markdown@0.1.0/index.js";
 import {Http} from "../http/http.js";
-var markdown = require("markdown").markdown;
 
 class ArticlePreviewComponent extends HTMLElement {
     constructor(params) {

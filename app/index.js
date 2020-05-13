@@ -1,4 +1,3 @@
-import "@webcomponents/webcomponentsjs/webcomponents-lite";
 import {RouterHandler} from "./router/router-handler.js";
 import {Authentication} from "./auth/authentication.js";
 import {Core} from "./core/core.js";

@@ -1,4 +1,4 @@
-var Navigo = require('navigo');
+import Navigo from "https://unpkg.com/navigo@7.1.2/lib/navigo.es.js";
 import {CLoginComponent} from "../pages/login.comp.js";
 import {AuthDefender} from "../auth/auth-defender.js";
 import {SettingsComponent} from "../pages/settings.comp.js";
