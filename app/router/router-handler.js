@@ -3,7 +3,6 @@ import {CLoginComponent} from "../pages/login.comp";
 import {AuthDefender} from "../auth/auth-defender";
 import {SettingsComponent} from "../pages/settings.comp";
 import {EditorComponent} from "../pages/editor.comp";
-import {ArticlePreviewComponent} from "../pages/article-preview.comp";
 import {ProfileComponent} from "../pages/profile.comp";
 import {CRegisterComponent} from "../pages/register.comp";
 import {HomeComponent} from "../pages/home.comp";
@@ -42,13 +41,20 @@ export class RouterHandler {
             {path: '/login', resolve: CLoginComponent},
             {path: '/register', resolve: CRegisterComponent},
             {path: '/profile/:username', resolve: ProfileComponent},
-            {path: '/article/:slug', resolve: ArticlePreviewComponent},
             {path: '/editor/:slug', resolve: EditorComponent, canActivate: AuthDefender.canActivate},
             {path: '/editor', resolve: EditorComponent, canActivate: AuthDefender.canActivate}
         ];
 
         this.router.on(() => {
             RouterHandler.inject(new HomeComponent())
+        }).resolve();
+
+        this.router.on(
+        '/article/:slug',
+        (params) => {
+            import('../pages/article-preview.comp.js').then((Component) =>
+                RouterHandler.inject(new Component.default(params))
+            );
         }).resolve();
 
         routes.forEach(route => {

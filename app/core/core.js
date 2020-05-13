@@ -6,7 +6,6 @@ import {CRegisterComponent} from "../pages/register.comp";
 import {RouterOutlet} from "../router/router-outlet";
 import {ComponentRegistry} from "./component-registry";
 import {ProfileComponent} from "../pages/profile.comp";
-import {ArticlePreviewComponent} from "../pages/article-preview.comp";
 import {CommentPreviewComponent} from "../components/comment-preview.comp";
 import {EditorComponent} from "../pages/editor.comp";
 import {SettingsComponent} from "../pages/settings.comp";
@@ -60,10 +59,6 @@ const components = [
     {
         tagName: 'c-profile',
         component: ProfileComponent
-    },
-    {
-        tagName: 'article-preview',
-        component: ArticlePreviewComponent
     },
     {
         tagName: 'comment-preview',
