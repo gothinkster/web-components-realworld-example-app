@@ -102,7 +102,7 @@ export class CNavComponent extends HTMLElement {
         liNavItem.className = 'nav-item';
 
         const aNavLink = document.createElement('a');
-        aNavLink.classList = 'nav-link';
+        aNavLink.classList.add('nav-link');
         aNavLink.href = href;
         aNavLink.innerHTML = content;
 

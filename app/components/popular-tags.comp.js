@@ -52,7 +52,7 @@ export class PopularTagsComponent extends HTMLElement {
         tagEl.className = 'tag-pill tag-default';
         tagEl.innerHTML = tag;
         tagEl.href = '#/';
-        tagEl.style = "cursor: pointer;";
+        tagEl.setAttribute('style', 'cursor: pointer;');
         return tagEl;
     }
 
