@@ -16,6 +16,14 @@
     <router-outlet></router-outlet>
 </div>
 <c-footer></c-footer>
-<script type="module" src="index.js"></script>
+
+<!-- polyfill `nomodule` in Safari 10.1: -->  
+<script type=module>  
+!function(e,t,n){!("noModule"in(t=e.createElement("script")))&&"onbeforeload"in t&&(n=!1,e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove())}(document)
+</script>
+
+<script src="index.js" type="module"></script>
+<script src="dist/polyfills.bundle.js" nomodule async defer></script>
+<script src="dist/app.bundle.js" nomodule async defer></script>
 </body>
 </html>
