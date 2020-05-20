@@ -12,6 +12,7 @@ We've gone to great lengths to adhere to the Vanilla JS community styleguides & 
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
+> Also check out the [esm](https://github.com/gothinkster/web-components-realworld-example-app/tree/esm) branch for a build-less development environment and shipping untranspiled ES Modules code to modern browsers.
 
 # Getting started
 
