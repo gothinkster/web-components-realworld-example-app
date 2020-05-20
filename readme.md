@@ -12,12 +12,31 @@ We've gone to great lengths to adhere to the Vanilla JS community styleguides & 
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
-> Also check out the [esm](https://github.com/gothinkster/web-components-realworld-example-app/tree/esm) branch for a build-less development environment and shipping untranspiled ES Modules code to modern browsers.
-
 # Getting started
 
-`yarn`
+Checkout the `esm` branch after cloning the repo:
 
-`yarn start`
+```shell
+$ git clone git@github.com:gothinkster/web-components-realworld-example-app.git
+$ cd web-components-realworld-example-app
+$ git checkout --track origin/esm
+```
 
-Open `localhost:8080` to view the app.
+You can now serve the `./app` folder with any local server of your choosing and start developing. The project uses [servor](https://github.com/lukejacksonn/servor) in the package.json start script so to use that you can do:
+
+```shell
+$ yarn
+$ yarn start
+```
+
+to start development, and:
+
+```shell
+$ yarn build
+```
+
+to produce a legacy bundle that runs in old browsers up to IE 11.
+
+## More reading
+
+> Read this [blog post](https://github.com/gothinkster/web-components-realworld-example-app/wiki/Converting-existing-project-to-use-ES-modules-in-production) for a detailed explanation of all the changes that were needed to convert this project from "webpack and babel all the things" to "untranspiled ESM in dev and modern browsers / legacy webpack bundle in old browsers".
