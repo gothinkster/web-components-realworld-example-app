@@ -1,3 +1,3 @@
 export const config = {
-    rest_url: 'https://conduit.productionready.io/api/'
+    rest_url: 'https://api.realworld.io/api/'
 };
